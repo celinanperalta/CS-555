@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Usage: ./run <file>
+
+python3 main.py --file $1
+
