@@ -1,7 +1,10 @@
+import datetime
 from tabulate import tabulate
 import pandas as pd
 import parser as parser
 import consts
+from util import gedcom_date_to_datetime
+import validator
 
 class Individual:
     def __init__(self, id, name = None, sex = None, birth = None, death = None, famc = None, fams = None) -> None:
@@ -12,19 +15,18 @@ class Individual:
         self.death = death
         self.famc = famc
         self.fams = fams
-        self.anomalies = []
 
     def set_name(self, name):
-        self.name = name
+        self.name = name.replace("/", "")
 
     def set_sex(self, sex):
         self.sex = sex
     
     def set_birth(self, birth):
-        self.birth = birth
+        self.birth = gedcom_date_to_datetime(birth)
     
     def set_death(self, death):
-        self.death = death
+        self.death = gedcom_date_to_datetime(death)
     
     def set_famc(self, famc):
         self.famc = famc
@@ -36,8 +38,7 @@ class Individual:
         return [self.id, self.name, self.sex, self.birth, self.death, self.famc, self.fams]
 
     def __str__(self):
-        return f"{self.id} {self.name}"
-
+        return f"{self.name} ({self.id})"
 
 class Family:
     def __init__(self, id, husband = None, wife = None, children = [], marriage_date = None, divorce_date = None) -> None:
@@ -47,7 +48,6 @@ class Family:
         self.children = []
         self.marriage_date = marriage_date
         self.divorce_date = divorce_date
-        self.anomalies = []
 
     def set_id(self, id):
         self.id = id
@@ -64,10 +64,10 @@ class Family:
             self.children.append(x)
 
     def set_marriage_date(self, marriage_date):
-        self.marriage_date = marriage_date
+        self.marriage_date = gedcom_date_to_datetime(marriage_date)
 
     def set_divorce_date(self, divorce_date):
-        self.divorce_date = divorce_date
+        self.divorce_date = gedcom_date_to_datetime(divorce_date)
 
     def add_child(self, child):
         self.children.append(child)
@@ -169,7 +169,7 @@ class GEDCOM:
                     if tag == consts.GEDCOM_TAG_MARR:
                         i += 1
                         if (self.__is_date_entry(self.df.loc[i])):
-                            family.marriage_date = self.df.loc[i]['args']
+                            family.set_marriage_date(self.df.loc[i]['args'])
                     elif tag == consts.GEDCOM_TAG_HUSB:
                         family.set_husband(self.get_individual(args))
                     elif tag == consts.GEDCOM_TAG_WIFE:
@@ -186,7 +186,12 @@ class GEDCOM:
                 self.families.append(family)
             if (i < len(self.df) and self.df.loc[i]['tag'] != consts.GEDCOM_TAG_FAM):
                 i += 1
-
+    
+    def validate_entities(self):
+        for x in self.individuals:
+            validator.validate(x)
+        for x in self.families:
+            validator.validate(x)
 
 
     
