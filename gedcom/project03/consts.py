@@ -51,4 +51,11 @@ TAGS = [
     GEDCOM_TAG_NOTE
 ]
 
+# Errors and anomalies go here
+
+MSG_US01 = "Error US01: {0} date {1} is after the current date."
+MSG_US07 = "Anomaly US07: {0} is older than 150 years old."
+
+
+
 
