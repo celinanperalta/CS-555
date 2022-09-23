@@ -4,7 +4,6 @@ import parser as parser
 import consts
 
 class Individual:
-
     def __init__(self, id, name = None, sex = None, birth = None, death = None, famc = None, fams = None) -> None:
         self.id = id
         self.name = name
@@ -13,6 +12,7 @@ class Individual:
         self.death = death
         self.famc = famc
         self.fams = fams
+        self.anomalies = []
 
     def set_name(self, name):
         self.name = name
@@ -32,6 +32,9 @@ class Individual:
     def set_fams(self, fams):
         self.fams = fams
 
+    def to_table_row(self):
+        return [self.id, self.name, self.sex, self.birth, self.death, self.famc, self.fams]
+
     def __str__(self):
         return f"{self.id} {self.name}"
 
@@ -44,6 +47,7 @@ class Family:
         self.children = []
         self.marriage_date = marriage_date
         self.divorce_date = divorce_date
+        self.anomalies = []
 
     def set_id(self, id):
         self.id = id
@@ -81,6 +85,7 @@ class GEDCOM:
         self.df = pd.DataFrame(columns=["level",  "tag", "valid", "args", "ident"])
         self.families = []
         self.individuals = []
+        self.anomalies = []
         self.__init_gedcom()
 
     # Read gedcom entries and print out valid and invalid tags
@@ -109,9 +114,8 @@ class GEDCOM:
     
     def print_individuals(self):
         table = [["ID", "Name", "Sex", "Birth", "Death", "FAMC", "FAMS"]]
-        for x in self.individuals:
-            rows = x.__dict__.values()
-            table.append(x.__dict__.values())
+        for individual in self.individuals:
+            table.append(individual.to_table_row())
         print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
 
     def __is_date_entry(self, entry):

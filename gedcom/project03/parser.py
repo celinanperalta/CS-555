@@ -42,8 +42,10 @@ def process_entry(entry):
     groups = match.groups()
     level = groups[0]
     ident = groups[1].rstrip(' ')
+    ident = ident.replace("@", "")
     tag = groups[2]
     args = groups[3][1:]
+    args = args.replace("@", "")
 
     valid = "Y" if is_valid_entry(level, ident, tag, args) else "N"
 

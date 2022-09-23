@@ -23,7 +23,6 @@ def main():
     gedcom.print_families()
 
 
-        
     return 0
 
 
