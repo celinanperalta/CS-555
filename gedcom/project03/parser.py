@@ -11,7 +11,7 @@ def is_valid_date(date):
     # Very lax check on date format
     re = '(\d{1,2}) ([A-Z]{3}) (\d{4})'
     match = regex.match(re, date)
-    if match is None or match.groups()[1] not in consts.MONTHS:
+    if match is None or match.groups()[1] not in consts.MONTHS.keys():
         return f"Error: Bad date {date}"
 
 # Input: [level, tag, args, ident] from GEDCOM file

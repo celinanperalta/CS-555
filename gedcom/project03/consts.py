@@ -1,4 +1,17 @@
-MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
+MONTHS = {
+    "JAN": 1, 
+    "FEB": 2, 
+    "MAR": 3, 
+    "APR": 4, 
+    "MAY": 5, 
+    "JUN": 6, 
+    "JUL": 7, 
+    "AUG": 8, 
+    "SEP": 9, 
+    "OCT": 10, 
+    "NOV": 11, 
+    "DEC": 12
+}
 
 GEDCOM_TAG_INDI = "INDI"
 GEDCOM_TAG_NAME = "NAME"
@@ -37,5 +50,12 @@ TAGS = [
     GEDCOM_TAG_TRLR,
     GEDCOM_TAG_NOTE
 ]
+
+# Errors and anomalies go here
+
+MSG_US01 = "Error US01: {0} date {1} is after the current date."
+MSG_US07 = "Anomaly US07: {0} is older than 150 years old."
+
+
 
 

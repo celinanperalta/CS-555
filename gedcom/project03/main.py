@@ -22,6 +22,8 @@ def main():
     gedcom.print_individuals()
     gedcom.print_families()
 
+    gedcom.validate_entities()
+
 
     return 0
 
