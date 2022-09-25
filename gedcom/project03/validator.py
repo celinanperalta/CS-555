@@ -26,6 +26,17 @@ def check_US01(obj):
         if obj.divorce_date is not None and obj.divorce_date > curr_date:
             print(consts.MSG_US01.format("Divorce", obj.divorce_date))
 
+# Error US04: Marriage before divorce
+def check_US04(family) -> None:
+    if obj.divorce_date is not None and (obj.marriage_date is None or obj.marriage_date > obj.divorce_date):
+        #test when marriage date is None
+        print(consts.MSG_US04.format(obj.marriage_date, obj.divorce_date))
+
+# Error US05: Marriage before death
+def check_US05(individual) -> None:
+    if obj.fams is not None and obj.death is not None and obj.fams.marriage_date is not None and obj.death < obj.fams.marriage_date:
+        print(consts.MSG_US05.format(obj.fams.marriage_date, obj.death))
+        
 # Anomaly US07: Less then 150 years old
 def check_US07(individual) -> None:
     curr_date = datetime.datetime.now()
