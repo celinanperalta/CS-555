@@ -1,7 +1,7 @@
 import datetime
 from tabulate import tabulate
 import pandas as pd
-import parser as parser
+import parse as parser
 import consts
 from util import gedcom_date_to_datetime
 import validator
