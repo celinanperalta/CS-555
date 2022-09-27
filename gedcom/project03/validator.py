@@ -12,6 +12,8 @@ def validate(obj):
         check_US07(obj)
     else:
         check_US01(obj)
+        check_US04(obj)
+        check_US05(obj)
 
 def check_US01(obj):
     curr_date = datetime.datetime.now()
@@ -42,6 +44,18 @@ def check_US02(individual) -> None:
         print(const.MSG_US03 ) #finish this up
     
 
+# Error US04: Marriage before divorce
+def check_US04(family) -> None:
+    if family.divorce_date is not None and (family.marriage_date is None or family.marriage_date > family.divorce_date):
+        print(consts.MSG_US04.format(str(family.wife), str(family.husband), family.marriage_date, family.divorce_date))
+
+# Error US05: Marriage before death
+def check_US05(family) -> None:
+    if family.wife.death is not None and family.marriage_date is not None and family.wife.death < family.marriage_date:
+        print(consts.MSG_US05.format(str(family.wife), family.marriage_date, family.wife.death))
+    if family.husband.death is not None and family.marriage_date is not None and family.husband.death < family.marriage_date:
+        print(consts.MSG_US05.format(str(family.husband), family.marriage_date, family.husband.death))
+    
 # Anomaly US07: Less then 150 years old
 def check_US07(individual) -> None:
     curr_date = datetime.datetime.now()
