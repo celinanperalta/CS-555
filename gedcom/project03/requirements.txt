@@ -1,0 +1,5 @@
+pandas
+tabulate
+regex
+pytest
+argparse

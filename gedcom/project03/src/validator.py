@@ -1,6 +1,6 @@
 import datetime
-from model import Individual, Family
-import consts
+from src.model import Individual, Family
+import src.consts as consts
 
 # TODO: Put all messages into one dict keyed by US##
 def get_message(id, item, args):

@@ -1,0 +1,21 @@
+name: GEDCOM
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
+        
+      - name: Install dependencies with pipenv
+        working-directory: ${{env.working-directory}}
+        run: |
+          pip install pipenv
+          pipenv install --deploy --dev
+          pipenv run pytest
