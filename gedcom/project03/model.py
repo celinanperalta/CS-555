@@ -1,4 +1,4 @@
-from src.util import gedcom_date_to_datetime
+from util import gedcom_date_to_datetime
 
 class Individual:
     def __init__(self, id, name = None, sex = None, birth = None, death = None, famc = None, fams = None) -> None:

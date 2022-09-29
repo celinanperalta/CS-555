@@ -3,8 +3,8 @@ from tabulate import tabulate
 import pandas as pd
 import parse as parser
 import consts
-from src.util import gedcom_date_to_datetime
-import src.validator as validator
+from util import gedcom_date_to_datetime
+import validator
 from model import Family, Individual
 class GEDCOM:
     def __init__(self, entries):

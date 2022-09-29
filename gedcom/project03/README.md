@@ -1,11 +1,6 @@
-# Setup
-```
-cd gedcom/project03
-pip install -r requirements.txt
-```
 # How to Run
 ```
-cd gedcom/project03/src
+cd gedcom/project03
 chmod u+x main.py
 python main.py --file <filename>
 ```
