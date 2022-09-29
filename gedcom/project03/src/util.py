@@ -1,5 +1,5 @@
 import datetime
-import consts
+import src.consts
 
 def gedcom_date_to_datetime(d):
     d = d.split(" ", 2)
