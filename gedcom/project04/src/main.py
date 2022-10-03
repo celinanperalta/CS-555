@@ -4,12 +4,12 @@ import sys
 import argparse
 import regex
 import consts
-import parser as parser
+import parse as parser
 from gedcom import GEDCOM
 
 def main():
     parser = argparse.ArgumentParser(
-        description="CS-555 GEDCOM Parser", prog="gedcom.py")
+        description="CS-555 GEDCOM Parser", prog="main.py")
     parser.add_argument("--file", type=argparse.FileType('r'),
                         help="Name of GEDCOM file to read.")
     args = parser.parse_args()
