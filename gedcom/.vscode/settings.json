@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./project04/src"
+    ]
+}
