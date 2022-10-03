@@ -1,9 +1,11 @@
 import pytest
 import datetime
 import sys
-from src import consts
-from src.model import Individual, Family
-from src.validator import check_US01
+sys.path.append("..")
+sys.path.append("../project04/src")
+import consts
+from model import Individual, Family
+from validator import check_US01
 
 def test_invalid_birth(capfd):
     obj = Individual(id="I01", birth = datetime.datetime.now() + datetime.timedelta(days=1))
