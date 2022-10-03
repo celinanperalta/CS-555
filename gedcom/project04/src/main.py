@@ -5,7 +5,7 @@ import argparse
 import regex
 import consts
 import parse as parser
-from gedcom import GEDCOM
+from src.gedcom import GEDCOM
 
 def main():
     parser = argparse.ArgumentParser(
