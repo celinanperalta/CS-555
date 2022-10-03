@@ -1,9 +1,10 @@
+#!/usr/bin/env python
 import pandas as pd
 import sys
 import argparse
 import regex
 import consts
-import parser as parser
+import parse as parse
 from gedcom import GEDCOM
 
 #!/usr/bin/env python
@@ -25,7 +26,7 @@ def main():
     gedcom.print_individuals()
     gedcom.print_families()
 
-    gedcom.validate_entities()
+    # gedcom.validate_entities()
 
 
     return 0
