@@ -6,6 +6,9 @@ import consts
 import parser as parser
 from gedcom import GEDCOM
 
+#!/usr/bin/env python
+#`chmod u+x main.py`
+
 def main():
     parser = argparse.ArgumentParser(
         description="CS-555 GEDCOM Parser", prog="gedcom.py")
