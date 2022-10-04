@@ -32,12 +32,14 @@ def check_US01(obj):
             print(consts.MSG_US01.format("Divorce", obj.divorce_date))
 
 
+
+
 # Error US02: Birth before marriage
-def check_US02(individual) -> None:
-    if individual.birth is not None and individual.marriage_date is not None and individual.birth < individual.marriage_date:
-        print(consts.MSG_US02.format(str(individual.birth), individual.marriage_date))
-    if individual.birth_date == individual.marriage_date:
-        print(consts.MSG_US02.format(str(individual.birth), individual.marriage_date))
+def check_US02(obj):
+    if obj.birth is not None and obj.marriage_date is not None and obj.birth < obj.marriage_date:
+        print(consts.MSG_US02.format(str(obj.birth), obj.marriage_date))
+    if obj.birth_date == obj.marriage_date:
+        print(consts.MSG_US02.format(str(obj.birth), obj.marriage_date))
 
 
 # Error US03: Birth before death
