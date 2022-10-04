@@ -4,8 +4,11 @@ import sys
 import argparse
 import regex
 import consts
-import parser as parser
+import parse as parse
 from gedcom import GEDCOM
+
+#!/usr/bin/env python
+#`chmod u+x main.py`
 
 def main():
     parser = argparse.ArgumentParser(
