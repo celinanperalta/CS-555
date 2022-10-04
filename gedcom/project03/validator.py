@@ -61,6 +61,13 @@ def check_US05(family) -> None:
     if family.husband.death is not None and family.marriage_date is not None and family.husband.death < family.marriage_date:
         print(consts.MSG_US05.format(str(family.husband), family.marriage_date, family.husband.death))
 
+# Error US06: Divorce before death
+def check_US06(family) -> None:
+    if family.wife.death is not None and family.divorce_date is not None and family.wife.death < family.divorce_date:
+        print(consts.MSG_US06.format(str(family.wife), family.divorce_date, family.wife.death))
+    if family.husband.death is not None and family.divorce_date is not None and family.husband.death < family.divorce_date:
+        print(consts.MSG_US06.format(str(family.husband), family.divorce_date, family.husband.death))
+
 # Anomaly US07: Less then 150 years old
 def check_US07(individual) -> None:
     curr_date = datetime.datetime.now()
