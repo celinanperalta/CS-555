@@ -54,6 +54,8 @@ TAGS = [
 # Errors and anomalies go here
 
 MSG_US01 = "Error US01: {0} date {1} is after the current date."
+MSG_US02 = "Error US02: {0} marriage date is before birth date."
+MSG_US03 = "Error US03: {0} death date is before birth date."
 MSG_US07 = "Anomaly US07: {0} is older than 150 years old."
 MSG_US04 = "Error US04: {0} and {1}'s marriage date {2} is after divorce date {3}."
 MSG_US05 = "Error US05: {0}'s marriage date {1} is after death date {2}."

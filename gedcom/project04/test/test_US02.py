@@ -8,32 +8,37 @@ from model import Individual, Family
 from validator import check_US02
 
 def test_birth_before_marriage(capfd):
-    obj = Family(id="F01", husband="Sam", wife="Judy", birth = datetime.datetime.now() + datetime.timedelta(days=1), marriage_date=datetime.datetime.now())
-    check_US02(obj)
+    obj = Individual(id="I01", birth = datetime.datetime(1960, 3, 6) + datetime.timedelta(days=1))
+    obj2 = Family(id="F01", marriage_date = datetime.datetime(1990, 8, 9) + datetime.timedelta(days=1))
+    check_US02(obj2, obj)
     out, err = capfd.readouterr()
-    assert out.strip() == consts.MSG_US02.format("Birth", obj.birth, obj.marriage_date)
+    assert out.strip() == consts.MSG_US02.format(str(obj), obj.birth, obj2.marriage_date)
 
 
 def test_valid_marriage(capfd):
-    obj = Family(id="FO1", husband="Herbert", wife="Sherbet", marriage_date=datetime.datetime.now(), birth = datetime.datetime.now() + datetime.timedelta(days=1))
-    check_US02(obj)
+    obj = Individual(id="I01", birth = datetime.datetime(1960, 1, 2) + datetime.timedelta(days=1))
+    obj2 = Family(id="FO1", marriage_date=datetime.datetime(2000, 10, 1))
+    check_US02(obj2, obj)
     out, err = capfd.readouterr()
-    assert out.strip() == ""
+    assert out.strip() == consts.MSG_US02.format(str(obj), obj.birth, obj2.marriage_date)
 
 def test_birth_no_marriage(capfd):
-    obj = Family(id="I01", birth = datetime.datetime.now())
-    check_US02(obj)
+    obj = Individual(id="I01", birth = datetime.datetime(2000, 12, 1) + datetime.timedelta(days=1))
+    obj2 = Family(id="I01", marriage_date=None)
+    check_US02(obj2, obj)
     out, err = capfd.readouterr()
-    assert out.strip() == ""
+    assert out.strip() == "Error: no input"
 
 def test_marriage_no_birth(capfd):
-    obj = Family(id="F01", husband="Max", wife="Ruby", marriage_date=datetime.datetime.now())
-    check_US02(obj)
+    obj = Individual(id="I01", birth=None)
+    obj2 = Family(id="F01", marriage_date=datetime.datetime.now())
+    check_US02(obj2, obj)
     out, err = capfd.readouterr()
-    assert out.strip() == consts.MSG_US02.format(obj.wife, obj.husband, obj.birth, obj.marriage_date)
+    assert out.strip() == "Error: no input"
 
-def test_empty(capfd):
-    obj = Individual(id="I01")
-    check_US02(obj)
+def test_same_birth_same_marriage(capfd):
+    obj = Individual(id="I01", birth = datetime.datetime(1999, 3, 20) + datetime.timedelta(days=1))
+    obj2 = Family(id="F01", marriage_date = datetime.datetime(1999, 3, 20) + datetime.timedelta(days=1))
+    check_US02(obj2, obj)
     out, err = capfd.readouterr()
-    assert out == ""
+    assert out.strip() == consts.MSG_US02.format(str(obj), obj.birth, obj2.marriage_date)

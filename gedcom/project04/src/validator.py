@@ -1,6 +1,6 @@
 import datetime
 from model import Individual, Family
-import consts as consts
+import consts 
 
 # TODO: Put all messages into one dict keyed by US##
 def get_message(id, item, args):
@@ -27,6 +27,24 @@ def check_US01(obj):
             print(consts.MSG_US01.format("Marriage", obj.marriage_date))
         if obj.divorce_date is not None and obj.divorce_date > curr_date:
             print(consts.MSG_US01.format("Divorce", obj.divorce_date))
+
+# Error US02: Birth before marriage
+def check_US02(family, individual):
+    if (individual.birth is not None and family.marriage_date is not None):
+        if(individual.birth < family.marriage_date):
+            print(consts.MSG_US02.format(str(individual), individual.birth, family.marriage_date))
+        if (individual.birth == family.marriage_date):
+            print(consts.MSG_US02.format(str(individual), individual.birth, family.marriage_date))
+    if (individual.birth is None or family.marriage_date is None):
+        print("Error: no input")
+
+
+# Error US03: Birth before death
+def check_US03(individual) -> None:
+    if individual.birth is not None and individual.death is not None and individual.birth < individual.death:
+        print(consts.MSG_US03.format(str(individual.birth), individual.death))
+    if individual.birth == individual.death:
+        print(consts.MSG_US03.format(str(individual.birth), individual.death))
 
 # Error US04: Marriage before divorce
 def check_US04(family) -> None:
