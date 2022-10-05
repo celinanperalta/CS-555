@@ -32,12 +32,14 @@ def check_US01(obj):
             print(consts.MSG_US01.format("Divorce", obj.divorce_date))
 
 
+
+
 # Error US02: Birth before marriage
-def check_US02(individual) -> None:
-    if individual.birth is not None and individual.marriage_date is not None and individual.birth < individual.marriage_date:
-        print(consts.MSG_US02.format(str(individual.birth), individual.marriage_date))
-    if individual.birth_date == individual.marriage_date:
-        print(consts.MSG_US02.format(str(individual.birth), individual.marriage_date))
+def check_US02(obj):
+    if obj.birth is not None and obj.marriage_date is not None and obj.birth < obj.marriage_date:
+        print(consts.MSG_US02.format(str(obj.birth), obj.marriage_date))
+    if obj.birth_date == obj.marriage_date:
+        print(consts.MSG_US02.format(str(obj.birth), obj.marriage_date))
 
 
 # Error US03: Birth before death
@@ -88,3 +90,25 @@ def check_US07(individual) -> None:
         print(consts.MSG_US07.format(str(individual)))
 
 
+#birth before marriage/divource of parents
+def check_US08(family, individual):
+    if(family.divorce_date is not None and family.marriage_date is not None):
+        if(individual.birth < family.marriage_date):
+            print(consts.MSG_US08.format(str(individual), individual.birth, family.marriage_date)) 
+
+        #average days in a month is 30.4
+        if((((individual.birth - (family.divorce_date)).days))/30.4 > 9):
+            print(consts.MSG_US08.format(str(individual), individual.birth, family.divorce_date))
+
+    if(family.marriage_date is not None and family.divorce_date is None):
+        if(individual.birth < family.marriage_date):
+            print(consts.MSG_US08.format(str(individual), individual.birth, family.marriage_date)) 
+    
+#birth before death of parents
+def check_US09(family, individual):
+    if(family.wife.death is not None):
+        if(individual.birth < family.wife.death):
+            print(consts.MSG_US09.format(str(individual), individual.birth, family.wife.death))
+    elif(family.husband.death is not None):
+        if((((individual.birth - (family.husband.death)).days))/30.4 > 9):
+            print(consts.MSG_US09.format(str(individual), individual.birth, family.husband.death))
