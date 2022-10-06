@@ -27,8 +27,7 @@ def main():
     gedcom.print_individuals()
     gedcom.print_families()
 
-    # gedcom.validate_entities()
-    check_US17(gedcom.families)
+    gedcom.validate_entities()
 
 
     return 0

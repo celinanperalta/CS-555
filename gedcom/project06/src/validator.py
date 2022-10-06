@@ -22,8 +22,12 @@ def validate(gedcom):
     for x in gedcom.families:
         validate_obj(x)
 
+    # Checks that require entire list of families
     check_US11(gedcom.families)
-
+    check_US13(gedcom.families)
+    check_US17(gedcom.families)
+    
+# For validations that take singleton objects (i.e. Family, Individual)
 def validate_obj(obj):
     if isinstance(obj, Individual):
         check_US01(obj)
@@ -32,6 +36,7 @@ def validate_obj(obj):
         check_US01(obj)
         check_US04(obj)
         check_US05(obj)
+        check_US15(obj)
 
 def check_US01(obj):
     curr_date = datetime.datetime.now()
@@ -142,18 +147,18 @@ def check_US13(families):
     for family in families:
         sibling_pairs = list(combinations(family.children, 2))
         for pair in sibling_pairs:
-            delta: relativedelta.relativedelta = relativedelta.relativedelta(pair[0].birth_date, pair[1].birth_date)
-            days = (pair[0] - pair[1]).days
-            months = delta.years * 12 + delta.months
-            if not (days < 2 or delta.months > 8):
-                print(consts.MSG_US13.format(pair[0].id, pair[1].id))
+            if (pair[0].birth is not None and pair[1].birth is not None):
+                delta: relativedelta.relativedelta = relativedelta.relativedelta(pair[0].birth, pair[1].birth)
+                days = (pair[0].birth - pair[1].birth).days
+                months = delta.years * 12 + delta.months
+                if not (days < 2 or delta.months > 8):
+                    print(consts.MSG_US13.format(pair[0].id, pair[1].id))
     
 
 # There should be fewer than 15 siblings in a family
-def check_US15(families):
-    for family in families:
-        if len(family.children >= 15):
-            print(consts.MSG_US15.format(family.id))
+def check_US15(family):
+    if len(family.children) >= 15:
+        print(consts.MSG_US15.format(family.id))
 
 # Parents should not marry any of their descendants
 def check_US17(families: List[Family]):
