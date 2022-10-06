@@ -118,6 +118,9 @@ class GEDCOM:
             validator.validate(x)
         for x in self.families:
             validator.validate(x)
+        validator.check_US19(self.families)
+
+    
 
 
     
