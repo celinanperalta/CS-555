@@ -1,10 +1,14 @@
 import datetime
-from tabulate import tabulate
+
 import pandas as pd
-import parse as parser
+from tabulate import tabulate
+
 import consts
+import parse as parser
 import validator as validator
 from model import Family, Individual
+
+
 class GEDCOM:
     def __init__(self, entries):
         self.entries = entries

@@ -1,11 +1,15 @@
 #!/usr/bin/env python
-import pandas as pd
-import sys
 import argparse
+import sys
+
+import pandas as pd
 import regex
+
 import consts
 import parse as parser
 from gedcom import GEDCOM
+from validator import check_US17
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -23,7 +27,8 @@ def main():
     gedcom.print_individuals()
     gedcom.print_families()
 
-    gedcom.validate_entities()
+    # gedcom.validate_entities()
+    check_US17(gedcom.families)
 
 
     return 0

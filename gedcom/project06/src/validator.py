@@ -1,10 +1,16 @@
 import datetime
-from functools import reduce
-from model import Individual, Family
-import consts 
-from collections import defaultdict
-from util import is_date_overlap
 import pprint
+from collections import defaultdict, deque
+from functools import reduce
+from itertools import combinations
+from typing import List
+
+from dateutil import relativedelta
+
+import consts
+from model import Family, Individual
+from util import get_descendants_map, is_date_overlap
+
 
 # TODO: Put all messages into one dict keyed by US##
 def get_message(id, item, args):
@@ -132,13 +138,32 @@ def check_US11(families):
 
 #Birth dates of siblings should be more than 8 months apart or less than 
 # 2 days apart (twins may be born one day apart, e.g. 11:59 PM and 12:02 AM the following calendar day)
-def check_US13():
-    pass
+def check_US13(families):
+    for family in families:
+        sibling_pairs = list(combinations(family.children, 2))
+        for pair in sibling_pairs:
+            delta: relativedelta.relativedelta = relativedelta.relativedelta(pair[0].birth_date, pair[1].birth_date)
+            days = (pair[0] - pair[1]).days
+            months = delta.years * 12 + delta.months
+            if not (days < 2 or delta.months > 8):
+                print(consts.MSG_US13.format(pair[0].id, pair[1].id))
+    
 
 # There should be fewer than 15 siblings in a family
-def check_US15():
-    pass
+def check_US15(families):
+    for family in families:
+        if len(family.children >= 15):
+            print(consts.MSG_US15.format(family.id))
 
 # Parents should not marry any of their descendants
-def check_US17():
-    pass
+def check_US17(families: List[Family]):
+    descendants = get_descendants_map(families)
+
+    for family in families:
+        husband_descendants = list(map(lambda x: x.id, descendants[family.husband.id]))
+        wife_descendants = list(map(lambda x: x.id, descendants[family.wife.id]))
+        if family.husband.id in wife_descendants or family.wife.id in husband_descendants:
+            print(consts.MSG_US17.format(family.husband, family.wife))
+
+
+
