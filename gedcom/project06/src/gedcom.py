@@ -114,10 +114,9 @@ class GEDCOM:
                 i += 1
     
     def validate_entities(self):
-        for x in self.individuals:
-            validator.validate(x)
-        for x in self.families:
-            validator.validate(x)
+        validator.validate(self)
+        
+        
 
 
     

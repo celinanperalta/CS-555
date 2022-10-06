@@ -1,12 +1,24 @@
 import datetime
+from functools import reduce
 from model import Individual, Family
 import consts 
+from collections import defaultdict
+from util import is_date_overlap
+import pprint
 
 # TODO: Put all messages into one dict keyed by US##
 def get_message(id, item, args):
     pass
 
-def validate(obj):
+def validate(gedcom):
+    for x in gedcom.individuals:
+        validate_obj(x)
+    for x in gedcom.families:
+        validate_obj(x)
+
+    check_US11(gedcom.families)
+
+def validate_obj(obj):
     if isinstance(obj, Individual):
         check_US01(obj)
         check_US07(obj)
@@ -100,3 +112,33 @@ def check_US09(family, individual):
     elif(family.husband.death is not None):
         if((((individual.birth - (family.husband.death)).days))/30.4 > 9):
             print(consts.MSG_US09.format(str(individual), individual.birth, family.husband.death))
+
+# Marriage should not occur during marriage to another spouse
+def check_US11(families):
+    marriage_dict = defaultdict(lambda: [])
+
+    for family in families:
+        if family.marriage_date is not None:
+            marriage_details =  [[family.marriage_date, family.divorce_date if family.divorce_date is not None else datetime.datetime(4000, 1, 1, 1, 1)]]
+            marriage_dict[family.husband.id] += marriage_details
+            marriage_dict[family.wife.id] += marriage_details
+
+    for k,v in marriage_dict.items():
+        dates = sorted(v, key=lambda x: x[0])
+        valid = reduce(lambda x,y: is_date_overlap(x[0], x[1], y[0], y[1]), dates)
+    
+        if not valid:
+            print(consts.MSG_US11.format(k))
+
+#Birth dates of siblings should be more than 8 months apart or less than 
+# 2 days apart (twins may be born one day apart, e.g. 11:59 PM and 12:02 AM the following calendar day)
+def check_US13():
+    pass
+
+# There should be fewer than 15 siblings in a family
+def check_US15():
+    pass
+
+# Parents should not marry any of their descendants
+def check_US17():
+    pass
