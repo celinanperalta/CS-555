@@ -61,7 +61,9 @@ MSG_US04 = "Error US04: {0} and {1}'s marriage date {2} is after divorce date {3
 MSG_US05 = "Error US05: {0}'s marriage date {1} is after death date {2}."
 MSG_US08 = "Anomaly US08: {0} born {1} before marriage on {2}."
 MSG_US09 = "Error US09: {0} born {1} after death date on {2}."
-MSG_US10 = "Error US05: {0}'s marriage date {1} is less than 14 years after birth date {2}."
+MSG_US10 = "Anomaly US10: {0}'s marriage date {1} is less than 14 years after birth date {2}."
+MSG_US12 = "Anomaly US12: {0}'s birthday date in {1} is more than {2} years after their child {3}'s birth date in {4}."
+MSG_US16 = "Anomaly US16: {0} has another male family member with a different last name ({1})"
 
 
 

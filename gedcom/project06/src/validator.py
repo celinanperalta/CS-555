@@ -15,6 +15,8 @@ def validate(obj):
         check_US04(obj)
         check_US05(obj)
         check_US10(obj)
+        check_US12(obj)
+        check_US16(obj)
 
 def check_US01(obj):
     curr_date = datetime.datetime.now()
@@ -104,8 +106,29 @@ def check_US09(family, individual):
 
 #marriage after 14 for both spouses
 def check_US10(family) -> None:    
-    
-    if family.wife.birth.year is not None and family.marriage_date is not None and family.wife.birth.year + 14 > family.marriage_date.year:
+    if family.wife.birth is not None and family.marriage_date is not None and family.wife.birth.year + 14 > family.marriage_date.year:
         print(consts.MSG_US10.format(str(family.wife), family.marriage_date.year, family.wife.birth.year))
     if family.husband.birth is not None and family.marriage_date is not None and family.husband.birth.year + 14 > family.marriage_date.year:
         print(consts.MSG_US10.format(str(family.husband), family.marriage_date.year, family.husband.birth.year))
+
+#Mother should be less than 60 years older than her children and father should be less than 80 years older than his children
+def check_US12(family) -> None:
+    if family.children is not None and len(family.children) > 0:
+        for child in family.children:
+            if family.wife.birth is not None and child.birth is not None and family.wife.birth.year + 60 < child.birth.year:
+                print(consts.MSG_US12.format(str(family.wife), family.wife.birth.year, 60, str(child), child.birth.year))
+            if family.husband.birth is not None and child.birth is not None and family.husband.birth.year + 80 < child.birth.year:
+                print(consts.MSG_US12.format(str(family.husband), family.husband.birth.year, 80, str(child), child.birth.year))
+
+#All male members of a family should have the same last name
+def check_US16(family) -> None:
+    if family.children is not None and len(family.children) > 0:
+        sons = []
+        for child in family.children:
+            if  child.name is not None and child.sex == "M" and family.husband is not None and family.husband.name is not None and family.husband.sex == "M" and family.husband.name.split(" ",1)[1] != child.name.split(" ",1)[1]:
+                print(consts.MSG_US16.format(str(child), family.husband.name.split(" ",1)[1], child.sex))
+            if child.name is not None and child.sex == "M" and child.name.split(" ",1)[1] not in sons:
+                sons += [child.name.split(" ",1)[1]]
+                for name in sons:
+                    if name != child.name.split(" ",1)[1]:
+                        print(consts.MSG_US16.format(str(child), name, child.sex))
