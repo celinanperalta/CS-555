@@ -16,6 +16,7 @@ def validate(obj):
         check_US05(obj)
         check_US14(obj)
         check_US18(obj)
+        check_US10(obj)
 
 def check_US01(obj):
     curr_date = datetime.datetime.now()
@@ -139,3 +140,10 @@ def check_US18(family) -> None:
                 print(consts.MSG_US18.format(str(i)))
 
     
+#marriage after 14 for both spouses
+def check_US10(family) -> None:    
+    
+    if family.wife.birth.year is not None and family.marriage_date is not None and family.wife.birth.year + 14 > family.marriage_date.year:
+        print(consts.MSG_US10.format(str(family.wife), family.marriage_date.year, family.wife.birth.year))
+    if family.husband.birth is not None and family.marriage_date is not None and family.husband.birth.year + 14 > family.marriage_date.year:
+        print(consts.MSG_US10.format(str(family.husband), family.marriage_date.year, family.husband.birth.year))
