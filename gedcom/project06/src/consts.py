@@ -62,6 +62,9 @@ MSG_US05 = "Error US05: {0}'s marriage date {1} is after death date {2}."
 MSG_US08 = "Anomaly US08: {0} born {1} before marriage on {2}."
 MSG_US09 = "Error US09: {0} born {1} after death date on {2}."
 
+MSG_US14 = "Anomaly US14: {0} has more than 5 children born the same day."
+MSG_US18 = "Anomaly US18: {0} is married to their sibling."
+
 
 
 

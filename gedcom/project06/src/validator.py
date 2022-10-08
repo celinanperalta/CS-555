@@ -14,6 +14,8 @@ def validate(obj):
         check_US01(obj)
         check_US04(obj)
         check_US05(obj)
+        check_US14(obj)
+        check_US18(obj)
 
 def check_US01(obj):
     curr_date = datetime.datetime.now()
@@ -100,3 +102,40 @@ def check_US09(family, individual):
     elif(family.husband.death is not None):
         if((((individual.birth - (family.husband.death)).days))/30.4 > 9):
             print(consts.MSG_US09.format(str(individual), individual.birth, family.husband.death))
+
+    #no more than 5 births
+def check_US14(family):
+    sibling = family.children
+    siblingBirthday = {}
+
+    for i in sibling:
+        if(i.birth not in siblingBirthday):
+            siblingBirthday[i.birth] = 1 
+            #print(family.id)
+            #print(siblingBirthday)
+        else:
+            siblingBirthday[i.birth] += 1
+            #print(family.id)
+            #print(siblingBirthday)
+        if(siblingBirthday[i.birth] > 5):
+            print(consts.MSG_US14.format(str(family)))
+
+#siblings cannot marry each other
+def check_US18(family) -> None:
+    sibling = family.children
+    siblingMarriage = {}
+
+    for i in sibling:
+        if(i.fams is not None):
+            if(i.fams not in siblingMarriage):
+                siblingMarriage[i.fams] = 1 
+                #print(i)
+                #print(siblingMarriage)
+            else:
+                siblingMarriage[i.fams] += 1
+                #print(i)
+                #print(siblingMarriage)
+            if(siblingMarriage[i.fams] > 1):
+                print(consts.MSG_US18.format(str(i)))
+
+    
