@@ -103,7 +103,7 @@ def check_US09(family, individual):
         if((((individual.birth - (family.husband.death)).days))/30.4 > 9):
             print(consts.MSG_US09.format(str(individual), individual.birth, family.husband.death))
 
-    #no more than 5 births
+#no more than 5 births
 def check_US14(family):
     sibling = family.children
     siblingBirthday = {}
