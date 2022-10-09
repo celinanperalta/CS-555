@@ -26,6 +26,7 @@ def validate(gedcom):
     check_US11(gedcom.families)
     check_US13(gedcom.families)
     check_US17(gedcom.families)
+    check_US19(gedcom.families)
     
 # For validations that take singleton objects (i.e. Family, Individual)
 def validate_obj(obj):
@@ -129,6 +130,31 @@ def check_US09(family, individual):
         if((((individual.birth - (family.husband.death)).days))/30.4 > 9):
             print(consts.MSG_US09.format(str(individual), individual.birth, family.husband.death))
 
+#First cousins should not marry one another
+def check_US19(families):
+#   find all families where marriage date != null
+#   Find sibling sets, see if they have kids, then see if kids are married
+    marriages = []
+    children_map = defaultdict(lambda: [])
+    for family in families:
+        if (family.marriage_date is not None):
+            marriages += [(family.husband.id, family.wife.id)]
+        children_map[family.husband.id] += family.children
+        children_map[family.wife.id] += family.children
+
+    for family in families:
+        siblings = family.children
+        siblings_children = []
+        for x in siblings:
+            siblings_children += children_map[x.id]
+        pairs = list(combinations(siblings_children,2))
+        all_pairs = []
+        for x in pairs: 
+            all_pairs += [(x[0].id, x[1].id)]
+            all_pairs += [(x[1].id, x[0].id)]
+        for x in all_pairs:
+            if (x in marriages):
+                print(consts.MSG_US19.format(x[0], x[1]))
 
 #no more than 5 births
 def check_US14(family):
@@ -241,3 +267,4 @@ def check_US16(family) -> None:
                 for name in sons:
                     if name != child.name.split(" ",1)[1]:
                         print(consts.MSG_US16.format(str(child), name, child.sex))
+

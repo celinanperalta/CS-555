@@ -70,7 +70,7 @@ MSG_US15 = "Anomaly US15: Family {0} has more than 15 siblings."
 MSG_US16 = "Anomaly US16: {0} has another male family member with a different last name ({1})"
 MSG_US17 = "Anomaly US17: {0} is married to descendant/ancestor {1}."
 MSG_US18 = "Anomaly US18: {0} is married to their sibling."
-
+MSG_US19 = "Anomaly US19: {0} and {1} are married first cousins."
 
 
 

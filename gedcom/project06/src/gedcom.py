@@ -120,7 +120,6 @@ class GEDCOM:
     def validate_entities(self):
         validator.validate(self)
         
-        
 
 
     
