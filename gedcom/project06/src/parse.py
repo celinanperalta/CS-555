@@ -1,7 +1,8 @@
 from typing import List
-import consts
+
 import regex
 
+import consts
 
 
 def is_valid_tag(tag):

@@ -1,12 +1,34 @@
 import datetime
-from model import Individual, Family
-import consts 
+import pprint
+from collections import defaultdict, deque
+from functools import reduce
+from itertools import combinations
+from typing import List
+
+from dateutil import relativedelta
+
+import consts
+from model import Family, Individual
+from util import get_descendants_map, is_date_overlap
+
 
 # TODO: Put all messages into one dict keyed by US##
 def get_message(id, item, args):
     pass
 
-def validate(obj):
+def validate(gedcom):
+    for x in gedcom.individuals:
+        validate_obj(x)
+    for x in gedcom.families:
+        validate_obj(x)
+
+    # Checks that require entire list of families
+    check_US11(gedcom.families)
+    check_US13(gedcom.families)
+    check_US17(gedcom.families)
+    
+# For validations that take singleton objects (i.e. Family, Individual)
+def validate_obj(obj):
     if isinstance(obj, Individual):
         check_US01(obj)
         check_US07(obj)
@@ -16,7 +38,10 @@ def validate(obj):
         check_US05(obj)
         check_US14(obj)
         check_US18(obj)
+        check_US15(obj)
         check_US10(obj)
+        check_US12(obj)
+        check_US16(obj)
 
 def check_US01(obj):
     curr_date = datetime.datetime.now()
@@ -104,6 +129,7 @@ def check_US09(family, individual):
         if((((individual.birth - (family.husband.death)).days))/30.4 > 9):
             print(consts.MSG_US09.format(str(individual), individual.birth, family.husband.death))
 
+
 #no more than 5 births
 def check_US14(family):
     sibling = family.children
@@ -140,10 +166,78 @@ def check_US18(family) -> None:
                 print(consts.MSG_US18.format(str(i)))
 
     
+# Marriage should not occur during marriage to another spouse
+def check_US11(families):
+    marriage_dict = defaultdict(lambda: [])
+
+    for family in families:
+        if family.marriage_date is not None:
+            marriage_details =  [[family.marriage_date, family.divorce_date if family.divorce_date is not None else datetime.datetime(4000, 1, 1, 1, 1)]]
+            marriage_dict[family.husband.id] += marriage_details
+            marriage_dict[family.wife.id] += marriage_details
+
+    for k,v in marriage_dict.items():
+        dates = sorted(v, key=lambda x: x[0])
+        valid = reduce(lambda x,y: is_date_overlap(x[0], x[1], y[0], y[1]), dates)
+    
+        if not valid:
+            print(consts.MSG_US11.format(k))
+
+#Birth dates of siblings should be more than 8 months apart or less than 
+# 2 days apart (twins may be born one day apart, e.g. 11:59 PM and 12:02 AM the following calendar day)
+def check_US13(families):
+    for family in families:
+        sibling_pairs = list(combinations(family.children, 2))
+        for pair in sibling_pairs:
+            if (pair[0].birth is not None and pair[1].birth is not None):
+                delta: relativedelta.relativedelta = relativedelta.relativedelta(pair[0].birth, pair[1].birth)
+                days = (pair[0].birth - pair[1].birth).days
+                months = delta.years * 12 + delta.months
+                if not (days < 2 or delta.months > 8):
+                    print(consts.MSG_US13.format(pair[0].id, pair[1].id))
+    
+
+# There should be fewer than 15 siblings in a family
+def check_US15(family):
+    if len(family.children) >= 15:
+        print(consts.MSG_US15.format(family.id))
+
+# Parents should not marry any of their descendants
+def check_US17(families: List[Family]):
+    descendants = get_descendants_map(families)
+
+    for family in families:
+        husband_descendants = list(map(lambda x: x.id, descendants[family.husband.id]))
+        wife_descendants = list(map(lambda x: x.id, descendants[family.wife.id]))
+        if family.husband.id in wife_descendants or family.wife.id in husband_descendants:
+            print(consts.MSG_US17.format(family.husband, family.wife))
+
 #marriage after 14 for both spouses
 def check_US10(family) -> None:    
-    
-    if family.wife.birth.year is not None and family.marriage_date is not None and family.wife.birth.year + 14 > family.marriage_date.year:
+    if family.wife.birth is not None and family.marriage_date is not None and family.wife.birth.year + 14 > family.marriage_date.year:
         print(consts.MSG_US10.format(str(family.wife), family.marriage_date.year, family.wife.birth.year))
     if family.husband.birth is not None and family.marriage_date is not None and family.husband.birth.year + 14 > family.marriage_date.year:
         print(consts.MSG_US10.format(str(family.husband), family.marriage_date.year, family.husband.birth.year))
+
+
+#Mother should be less than 60 years older than her children and father should be less than 80 years older than his children
+def check_US12(family) -> None:
+    if family.children is not None and len(family.children) > 0:
+        for child in family.children:
+            if family.wife.birth is not None and child.birth is not None and family.wife.birth.year + 60 < child.birth.year:
+                print(consts.MSG_US12.format(str(family.wife), family.wife.birth.year, 60, str(child), child.birth.year))
+            if family.husband.birth is not None and child.birth is not None and family.husband.birth.year + 80 < child.birth.year:
+                print(consts.MSG_US12.format(str(family.husband), family.husband.birth.year, 80, str(child), child.birth.year))
+
+#All male members of a family should have the same last name
+def check_US16(family) -> None:
+    if family.children is not None and len(family.children) > 0:
+        sons = []
+        for child in family.children:
+            if  child.name is not None and child.sex == "M" and family.husband is not None and family.husband.name is not None and family.husband.sex == "M" and family.husband.name.split(" ",1)[1] != child.name.split(" ",1)[1]:
+                print(consts.MSG_US16.format(str(child), family.husband.name.split(" ",1)[1], child.sex))
+            if child.name is not None and child.sex == "M" and child.name.split(" ",1)[1] not in sons:
+                sons += [child.name.split(" ",1)[1]]
+                for name in sons:
+                    if name != child.name.split(" ",1)[1]:
+                        print(consts.MSG_US16.format(str(child), name, child.sex))
