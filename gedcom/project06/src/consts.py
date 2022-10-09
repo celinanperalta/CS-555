@@ -65,9 +65,12 @@ MSG_US10 = "Anomaly US10: {0}'s marriage date {1} is less than 14 years after bi
 MSG_US11 = "Anomaly US11: {0} is in multiple marriages."
 MSG_US12 = "Anomaly US12: {0}'s birthday date in {1} is more than {2} years after their child {3}'s birth date in {4}."
 MSG_US13 = "Anomaly US13: Siblings {0} and {1} were born less than 8 months apart."
+MSG_US14 = "Anomaly US14: {0} has more than 5 children born the same day."
 MSG_US15 = "Anomaly US15: Family {0} has more than 15 siblings."
 MSG_US16 = "Anomaly US16: {0} has another male family member with a different last name ({1})"
 MSG_US17 = "Anomaly US17: {0} is married to descendant/ancestor {1}."
+MSG_US18 = "Anomaly US18: {0} is married to their sibling."
+
 
 
 

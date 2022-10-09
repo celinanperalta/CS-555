@@ -36,6 +36,8 @@ def validate_obj(obj):
         check_US01(obj)
         check_US04(obj)
         check_US05(obj)
+        check_US14(obj)
+        check_US18(obj)
         check_US15(obj)
         check_US10(obj)
         check_US12(obj)
@@ -127,6 +129,43 @@ def check_US09(family, individual):
         if((((individual.birth - (family.husband.death)).days))/30.4 > 9):
             print(consts.MSG_US09.format(str(individual), individual.birth, family.husband.death))
 
+
+#no more than 5 births
+def check_US14(family):
+    sibling = family.children
+    siblingBirthday = {}
+
+    for i in sibling:
+        if(i.birth not in siblingBirthday):
+            siblingBirthday[i.birth] = 1 
+            #print(family.id)
+            #print(siblingBirthday)
+        else:
+            siblingBirthday[i.birth] += 1
+            #print(family.id)
+            #print(siblingBirthday)
+        if(siblingBirthday[i.birth] > 5):
+            print(consts.MSG_US14.format(str(family)))
+
+#siblings cannot marry each other
+def check_US18(family) -> None:
+    sibling = family.children
+    siblingMarriage = {}
+
+    for i in sibling:
+        if(i.fams is not None):
+            if(i.fams not in siblingMarriage):
+                siblingMarriage[i.fams] = 1 
+                #print(i)
+                #print(siblingMarriage)
+            else:
+                siblingMarriage[i.fams] += 1
+                #print(i)
+                #print(siblingMarriage)
+            if(siblingMarriage[i.fams] > 1):
+                print(consts.MSG_US18.format(str(i)))
+
+    
 # Marriage should not occur during marriage to another spouse
 def check_US11(families):
     marriage_dict = defaultdict(lambda: [])
@@ -173,13 +212,13 @@ def check_US17(families: List[Family]):
         if family.husband.id in wife_descendants or family.wife.id in husband_descendants:
             print(consts.MSG_US17.format(family.husband, family.wife))
 
-
 #marriage after 14 for both spouses
 def check_US10(family) -> None:    
     if family.wife.birth is not None and family.marriage_date is not None and family.wife.birth.year + 14 > family.marriage_date.year:
         print(consts.MSG_US10.format(str(family.wife), family.marriage_date.year, family.wife.birth.year))
     if family.husband.birth is not None and family.marriage_date is not None and family.husband.birth.year + 14 > family.marriage_date.year:
         print(consts.MSG_US10.format(str(family.husband), family.marriage_date.year, family.husband.birth.year))
+
 
 #Mother should be less than 60 years older than her children and father should be less than 80 years older than his children
 def check_US12(family) -> None:
