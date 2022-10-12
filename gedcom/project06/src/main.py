@@ -29,7 +29,6 @@ def main():
 
     gedcom.validate_entities()
 
-
     return 0
 
 
