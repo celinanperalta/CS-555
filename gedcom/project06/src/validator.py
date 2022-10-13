@@ -9,7 +9,7 @@ from dateutil import relativedelta
 
 import consts
 from model import Family, Individual
-from util import get_descendants_map, is_date_overlap
+from util import get_descendants_map, is_date_overlap, get_relativedelta
 
 
 # TODO: Put all messages into one dict keyed by US##
@@ -191,9 +191,8 @@ def check_US18(family) -> None:
             if(siblingMarriage[i.fams] > 1):
                 print(consts.MSG_US18.format(str(i)))
 
-    
-# Marriage should not occur during marriage to another spouse
-def check_US11(families):
+
+def US11_get_marriage_dict(families):
     marriage_dict = defaultdict(lambda: [])
 
     for family in families:
@@ -201,6 +200,12 @@ def check_US11(families):
             marriage_details =  [[family.marriage_date, family.divorce_date if family.divorce_date is not None else datetime.datetime(4000, 1, 1, 1, 1)]]
             marriage_dict[family.husband.id] += marriage_details
             marriage_dict[family.wife.id] += marriage_details
+    
+    return marriage_dict
+    
+# Marriage should not occur during marriage to another spouse
+def check_US11(families):
+    marriage_dict = US11_get_marriage_dict(families)
 
     for k,v in marriage_dict.items():
         dates = sorted(v, key=lambda x: x[0])
@@ -215,10 +220,8 @@ def check_US13(family):
     sibling_pairs = list(combinations(family.children, 2))
     for pair in sibling_pairs:
         if (pair[0].birth is not None and pair[1].birth is not None):
-            delta: relativedelta.relativedelta = relativedelta.relativedelta(pair[0].birth, pair[1].birth)
-            days = abs((pair[0].birth - pair[1].birth).days)
-            months = abs(delta.years * 12 + delta.months)
-            if not (days < 2 or months >= 8):
+            days_between, months_between = get_relativedelta(pair[0].birth, pair[1].birth)
+            if not (days_between < 2 or months_between >= 8):
                 print(consts.MSG_US13.format(pair[0].id, pair[1].id))
     
 
