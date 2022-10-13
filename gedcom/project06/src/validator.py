@@ -24,7 +24,6 @@ def validate(gedcom):
 
     # Checks that require entire list of families
     check_US11(gedcom.families)
-    check_US13(gedcom.families)
     check_US17(gedcom.families)
     check_US19(gedcom.families)
     
@@ -43,6 +42,7 @@ def validate_obj(obj):
         check_US10(obj)
         check_US12(obj)
         check_US16(obj)
+        check_US13(obj)
 
 def check_US01(obj):
     curr_date = datetime.datetime.now()
@@ -211,16 +211,15 @@ def check_US11(families):
 
 #Birth dates of siblings should be more than 8 months apart or less than 
 # 2 days apart (twins may be born one day apart, e.g. 11:59 PM and 12:02 AM the following calendar day)
-def check_US13(families):
-    for family in families:
-        sibling_pairs = list(combinations(family.children, 2))
-        for pair in sibling_pairs:
-            if (pair[0].birth is not None and pair[1].birth is not None):
-                delta: relativedelta.relativedelta = relativedelta.relativedelta(pair[0].birth, pair[1].birth)
-                days = (pair[0].birth - pair[1].birth).days
-                months = delta.years * 12 + delta.months
-                if not (days < 2 or delta.months > 8):
-                    print(consts.MSG_US13.format(pair[0].id, pair[1].id))
+def check_US13(family):
+    sibling_pairs = list(combinations(family.children, 2))
+    for pair in sibling_pairs:
+        if (pair[0].birth is not None and pair[1].birth is not None):
+            delta: relativedelta.relativedelta = relativedelta.relativedelta(pair[0].birth, pair[1].birth)
+            days = abs((pair[0].birth - pair[1].birth).days)
+            months = abs(delta.years * 12 + delta.months)
+            if not (days < 2 or months >= 8):
+                print(consts.MSG_US13.format(pair[0].id, pair[1].id))
     
 
 # There should be fewer than 15 siblings in a family
@@ -236,7 +235,7 @@ def check_US17(families: List[Family]):
         husband_descendants = list(map(lambda x: x.id, descendants[family.husband.id]))
         wife_descendants = list(map(lambda x: x.id, descendants[family.wife.id]))
         if family.husband.id in wife_descendants or family.wife.id in husband_descendants:
-            print(consts.MSG_US17.format(family.husband, family.wife))
+            print(consts.MSG_US17.format(family.husband.id, family.wife.id))
 
 #marriage after 14 for both spouses
 def check_US10(family) -> None:    
