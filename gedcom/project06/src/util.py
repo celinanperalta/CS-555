@@ -1,7 +1,7 @@
 import datetime
-from collections import defaultdict, deque
-
 import consts
+from collections import defaultdict, deque
+from dateutil import relativedelta
 
 
 def gedcom_date_to_datetime(d):
@@ -43,3 +43,10 @@ def get_descendants_map(families):
     
     return new_dict
 
+
+def get_relativedelta(d1, d2):
+    delta: relativedelta.relativedelta = relativedelta.relativedelta(d1, d2)
+    days = abs((d1 - d2).days)
+    months = abs(delta.years * 12 + delta.months)
+
+    return days, months
