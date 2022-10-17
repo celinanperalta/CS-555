@@ -145,7 +145,7 @@ def check_US14(family):
             #print(family.id)
             #print(siblingBirthday)
         if(siblingBirthday[i.birth] > 5):
-            print(consts.MSG_US14.format(str(family)))
+            print(consts.MSG_US14.format(str(family.id)))
 
 #siblings cannot marry each other
 def check_US18(family) -> None:
@@ -163,7 +163,7 @@ def check_US18(family) -> None:
                 #print(i)
                 #print(siblingMarriage)
             if(siblingMarriage[i.fams] > 1):
-                print(consts.MSG_US18.format(str(i)))
+                print(consts.MSG_US18.format(str(i.id)))
 
     
 # Marriage should not occur during marriage to another spouse
