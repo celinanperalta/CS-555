@@ -129,6 +129,7 @@ def check_US19(families):
         for x in all_pairs:
             if (x in marriages):
                 print(consts.MSG_US19.format(x[0], x[1]))
+                
   
 
     
