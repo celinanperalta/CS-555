@@ -71,6 +71,7 @@ MSG_US16 = "Anomaly US16: {0} has another male family member with a different la
 MSG_US17 = "Anomaly US17: {0} is married to descendant/ancestor {1}."
 MSG_US18 = "Anomaly US18: {0} is married to their sibling."
 MSG_US19 = "Anomaly US19: {0} and {1} are married first cousins."
+MSG_US20 = "Anomaly US20: {0} and {1} are married uncle/aunt - niece/nephew."
 
 
 
