@@ -29,7 +29,7 @@ def test_more_than_five_births(capfd):
     check_US14(obj)
     out, err = capfd.readouterr()
     #print(out.strip())
-    assert out.strip() == consts.MSG_US14.format(obj.id)
+    assert out.strip() == consts.MSG_US14.format(str(obj.id))
 
     #should not print out anomaly message , there are 4 siblings with the same birth
 def test_less_than_five_births(capfd):
