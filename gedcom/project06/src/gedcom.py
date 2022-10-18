@@ -27,11 +27,19 @@ class GEDCOM:
 
             row = list(filter(lambda x: x is not None, row))
 
-            print(f"-> {x.rstrip()}")
-            print(f"<-- {'|'.join(row).rstrip()}")
 
         self.__get_individuals()
         self.__get_families()
+
+    def print_valid(self):
+        for x in self.entries:
+            row = parser.process_entry(x)
+
+            row = list(filter(lambda x: x is not None, row))
+
+            print(f"-> {x.rstrip()}")
+            print(f"<-- {'|'.join(row).rstrip()}")
+
 
     def print_identifiers(self):
         print(self.df.loc[self.df['ident'].notnull()])

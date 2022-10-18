@@ -2,7 +2,7 @@ import datetime
 import pprint
 from collections import defaultdict, deque
 from functools import reduce
-from itertools import combinations
+from itertools import combinations, permutations, product
 from typing import List
 
 from dateutil import relativedelta
@@ -10,6 +10,7 @@ from dateutil import relativedelta
 import consts
 from model import Family, Individual
 from util import get_descendants_map, is_date_overlap, get_relativedelta
+
 
 
 # TODO: Put all messages into one dict keyed by US##
@@ -26,6 +27,7 @@ def validate(gedcom):
     check_US11(gedcom.families)
     check_US17(gedcom.families)
     check_US19(gedcom.families)
+    check_US20(gedcom.families)
     
 # For validations that take singleton objects (i.e. Family, Individual)
 def validate_obj(obj):
@@ -41,8 +43,9 @@ def validate_obj(obj):
         check_US15(obj)
         check_US10(obj)
         check_US12(obj)
-        check_US16(obj)
+     #   check_US16(obj)
         check_US13(obj)
+
 
 def check_US01(obj):
     curr_date = datetime.datetime.now()
@@ -271,4 +274,35 @@ def check_US16(family) -> None:
                 for name in sons:
                     if name != child.name.split(" ",1)[1]:
                         print(consts.MSG_US16.format(str(child), name, child.sex))
+
+#Aunts and uncles should not marry their nieces or nephews
+def check_US20(families):
+    #Check if niece or nephew's parents are aunt or uncles siblings
+
+    marriages = []
+    children_map = defaultdict(lambda: [])
+    for family in families:
+        if (family.marriage_date is not None):
+            marriages += [(family.husband.id, family.wife.id)]
+        children_map[family.husband.id] += [x.id for x in family.children]
+        children_map[family.wife.id] += [x.id for x in family.children]
+  
+    for family in families:
+        au = [x.id for x in family.children]
+        nn = []
+        for sibling in au:
+            for other_sibling in au:
+                if (sibling != other_sibling):
+                    nn += children_map[other_sibling]
+                    
+        check_marriages = product(au, nn)
+        for c in check_marriages:
+            if (c[0], c[1]) in marriages:
+                print(consts.MSG_US20.format(c[0], c[1]))
+            if (c[1], c[0]) in marriages:
+                print(consts.MSG_US20.format(c[1], c[0]))
+
+
+
+
 

@@ -8,7 +8,7 @@ import regex
 import consts
 import parse as parser
 from gedcom import GEDCOM
-from validator import check_US17
+from validator import check_US20
 
 
 def main():
@@ -23,11 +23,12 @@ def main():
         entries = file.readlines()
 
     gedcom = GEDCOM(entries)
-    
+    gedcom.print_valid()
     gedcom.print_individuals()
     gedcom.print_families()
 
     gedcom.validate_entities()
+
 
     return 0
 
