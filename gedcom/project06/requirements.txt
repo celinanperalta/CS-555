@@ -3,3 +3,4 @@ tabulate
 regex
 pytest
 argparse
+pytest

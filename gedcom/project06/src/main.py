@@ -1,15 +1,7 @@
 #!/usr/bin/env python
+
 import argparse
-import sys
-
-import pandas as pd
-import regex
-
-import consts
-import parse as parser
 from gedcom import GEDCOM
-from validator import check_US20
-
 
 def main():
     parser = argparse.ArgumentParser(
