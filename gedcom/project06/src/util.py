@@ -50,3 +50,12 @@ def get_relativedelta(d1, d2):
     months = abs(delta.years * 12 + delta.months)
 
     return days, months
+
+def get_children_of_individuals(families):
+    marriages = []
+    children_map = defaultdict(lambda: [])
+    for family in families:
+        if (family.marriage_date is not None):
+            marriages += [(family.husband.id, family.wife.id)]
+        children_map[family.husband.id] += family.children
+        children_map[family.wife.id] += family.children
