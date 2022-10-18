@@ -176,7 +176,7 @@ def check_US14(family):
             #print(family.id)
             #print(siblingBirthday)
         if(siblingBirthday[i.birth] > 5):
-            print(consts.MSG_US14.format(str(family)))
+            print(consts.MSG_US14.format(str(family.id)))
 
 #siblings cannot marry each other
 def check_US18(family) -> None:
@@ -194,7 +194,7 @@ def check_US18(family) -> None:
                 #print(i)
                 #print(siblingMarriage)
             if(siblingMarriage[i.fams] > 1):
-                print(consts.MSG_US18.format(str(i)))
+                print(consts.MSG_US18.format(str(i.id)))
 
 
 def US11_get_marriage_dict(families):
@@ -264,16 +264,26 @@ def check_US12(family) -> None:
 
 #All male members of a family should have the same last name
 def check_US16(family) -> None:
+    members = []
+    if (family.wife is not None):
+        members.append(family.wife)
+    if (family.husband is not None):
+        members.append(family.husband)
     if family.children is not None and len(family.children) > 0:
-        sons = []
-        for child in family.children:
-            if  child.name is not None and child.sex == "M" and family.husband is not None and family.husband.name is not None and family.husband.sex == "M" and family.husband.name.split(" ",1)[1] != child.name.split(" ",1)[1]:
-                print(consts.MSG_US16.format(str(child), family.husband.name.split(" ",1)[1], child.sex))
-            if child.name is not None and child.sex == "M" and child.name.split(" ",1)[1] not in sons:
-                sons += [child.name.split(" ",1)[1]]
-                for name in sons:
-                    if name != child.name.split(" ",1)[1]:
-                        print(consts.MSG_US16.format(str(child), name, child.sex))
+        members.extend(family.children)
+    men = []
+    last_names = []
+    hasPrinted = False
+    for member in members:
+        if member.name is not None and member.sex == "M":
+            if (member.name.split(" ",1)[1] not in last_names):
+                last_names.append(member.name.split(" ",1)[1])
+            men.append(member)
+    
+    for member in men:
+        for last_name in last_names:
+            if last_name != member.name.split(" ",1)[1]:
+                print(consts.MSG_US16.format((member.name + " (" + member.id + ")"), last_name))
 
 #Aunts and uncles should not marry their nieces or nephews
 def check_US20(families):
@@ -301,8 +311,3 @@ def check_US20(families):
                 print(consts.MSG_US20.format(c[0], c[1]))
             if (c[1], c[0]) in marriages:
                 print(consts.MSG_US20.format(c[1], c[0]))
-
-
-
-
-

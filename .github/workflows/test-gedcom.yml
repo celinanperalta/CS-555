@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      working-directory: ./gedcom/project04
+      working-directory: ./gedcom/project06
     steps:
       - uses: actions/checkout@v3
 
