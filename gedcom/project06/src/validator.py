@@ -145,7 +145,7 @@ def check_US14(family):
             #print(family.id)
             #print(siblingBirthday)
         if(siblingBirthday[i.birth] > 5):
-            print(consts.MSG_US14.format(str(family.id)))
+            print(consts.MSG_US14.format((family.id)))
 
 #siblings cannot marry each other
 def check_US18(family) -> None:
