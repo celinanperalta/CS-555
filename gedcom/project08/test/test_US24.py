@@ -11,8 +11,8 @@ def test_same_names_and_date(capfd):
     wife2 = Individual("I03", "Jane Doe", "F", datetime.datetime.now())
     husband2 = Individual("I04", "Jack Doe", "M", datetime.datetime.now())
 
-    family1 = Family("F01", husband1, wife1, [], gedcom_date_to_datetime("2 AUG 2024"))
-    family2 = Family("F02", husband2, wife2, [], gedcom_date_to_datetime("2 AUG 2024"))
+    family1 = Family("F01", husband1, wife1, [], gedcom_date_to_datetime("2 AUG 2022"))
+    family2 = Family("F02", husband2, wife2, [], gedcom_date_to_datetime("2 AUG 2022"))
 
     families = [family1, family2]
     individuals = [wife1, husband1, wife2, husband2]
