@@ -9,11 +9,9 @@ from dateutil import relativedelta
 
 import consts
 from model import Family, Individual
-from util import get_descendants_map, is_date_overlap, get_relativedelta
+from util import get_descendants_map, is_date_overlap, get_relativedelta, get_age_in_years
 
 
-
-# TODO: Put all messages into one dict keyed by US##
 def get_message(id, item, args):
     pass
 
@@ -28,6 +26,9 @@ def validate(gedcom):
     check_US17(gedcom.families)
     check_US19(gedcom.families)
     check_US20(gedcom.families)
+
+    # Checks that need to be listed later
+    check_US37(gedcom.individuals, gedcom.families)
     
 # For validations that take singleton objects (i.e. Family, Individual)
 def validate_obj(obj):
@@ -43,8 +44,9 @@ def validate_obj(obj):
         check_US15(obj)
         check_US10(obj)
         check_US12(obj)
-     #   check_US16(obj)
+        check_US16(obj)
         check_US13(obj)
+        check_US25(obj)
 
 
 def check_US01(obj):
@@ -176,7 +178,7 @@ def check_US14(family):
             #print(family.id)
             #print(siblingBirthday)
         if(siblingBirthday[i.birth] > 5):
-            print(consts.MSG_US14.format((family.id)))
+            print(consts.MSG_US14.format(str(family.id)))
 
 #siblings cannot marry each other
 def check_US18(family) -> None:
@@ -311,3 +313,58 @@ def check_US20(families):
                 print(consts.MSG_US20.format(c[0], c[1]))
             if (c[1], c[0]) in marriages:
                 print(consts.MSG_US20.format(c[1], c[0]))
+
+# No more than one child with the same name and birth date should appear in a family
+def check_US25(family: Family):
+    seen = set()
+    children: List[Individual] = family.children
+
+    for c in children:
+        if (c.name, c.birth) in seen:
+            print(consts.MSG_US25.format(c.id, family.id))
+        else:
+            seen.add((c.name, c.birth))
+
+# List all couples who were married when the older spouse was more than twice as old as the younger spouse
+# @returns: List of couples [(husband, wife)] where this is true
+def check_US34(families: List[Family]):
+
+    couples = []
+    for family in families:
+        if family.marriage_date is not None:
+            h_age = get_age_in_years(family.husband)
+            w_age = get_age_in_years(family.wife)
+            if (h_age > w_age and h_age > w_age * 2):
+                print(consts.MSG_US34.format(family.husband.id, family.wife.id))
+                couples.append((family.husband, family.wife))
+            elif (w_age > h_age and w_age > h_age * 2):
+                print(consts.MSG_US34.format(family.wife.id, family.husband.id))
+                couples.append((family.husband, family.wife))
+
+    return couples
+
+
+# List all living spouses and descendants of people in a GEDCOM file who died in the last 30 days
+# @returns: List of individuals surviving the deceased individual
+def check_US37(families, individuals):
+    all_relatives = get_descendants_map(families)
+
+    for family in families:
+        if family.marriage_date is not None:
+            all_relatives[family.husband.id].add(family.wife)
+            all_relatives[family.wife.id].add(family.husband)
+
+    survivors = {}
+    
+    for i in individuals:
+        if i.death is not None and (datetime.datetime.now() - i.death).days <= 30:
+            survivors[i.id] = list(filter(lambda x: x.death is None, all_relatives[i.id]))
+
+    return survivors
+    
+    
+
+    
+    
+
+

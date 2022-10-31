@@ -72,8 +72,5 @@ MSG_US17 = "Anomaly US17: {0} is married to descendant/ancestor {1}."
 MSG_US18 = "Anomaly US18: {0} is married to their sibling."
 MSG_US19 = "Anomaly US19: {0} and {1} are married first cousins."
 MSG_US20 = "Anomaly US20: {0} and {1} are married uncle/aunt - niece/nephew."
-
-
-
-
-
+MSG_US25 = "Anomaly US25: {0} has a non-unique name/birth date pair in family {1}."
+MSG_US34 = "Anomaly US34: {0} is more than twice as old as spouse {1}."

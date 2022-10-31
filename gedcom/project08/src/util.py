@@ -59,3 +59,6 @@ def get_children_of_individuals(families):
             marriages += [(family.husband.id, family.wife.id)]
         children_map[family.husband.id] += family.children
         children_map[family.wife.id] += family.children
+
+def get_age_in_years(i):
+    return abs(relativedelta.relativedelta(i.birth, datetime.datetime.now()).years)

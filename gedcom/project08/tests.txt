@@ -1,0 +1,64 @@
+============================= test session starts ==============================
+collecting ... collected 49 items
+
+test/test_US01.py::test_invalid_birth PASSED                             [  2%]
+test/test_US01.py::test_invalid_death PASSED                             [  4%]
+test/test_US01.py::test_invalid_marriage PASSED                          [  6%]
+test/test_US01.py::test_invalid_divorce PASSED                           [  8%]
+test/test_US01.py::test_empty PASSED                                     [ 10%]
+test/test_US02.py::test_birth_before_marriage PASSED                     [ 12%]
+test/test_US02.py::test_valid_marriage PASSED                            [ 14%]
+test/test_US02.py::test_birth_no_marriage PASSED                         [ 16%]
+test/test_US02.py::test_marriage_no_birth PASSED                         [ 18%]
+test/test_US02.py::test_same_birth_same_marriage PASSED                  [ 20%]
+test/test_US04.py::test_divorce_before_marriage PASSED                   [ 22%]
+test/test_US04.py::test_divorce_no_marriage PASSED                       [ 24%]
+test/test_US04.py::test_valid_divorce PASSED                             [ 26%]
+test/test_US04.py::test_marriage_no_divorce PASSED                       [ 28%]
+test/test_US04.py::test_empty PASSED                                     [ 30%]
+test/test_US08.py::test_birth_before_marriage PASSED                     [ 32%]
+test/test_US08.py::test_birth_after_9 PASSED                             [ 34%]
+test/test_US08.py::test_birth_in_9 PASSED                                [ 36%]
+test/test_US08.py::test_birth_after_marriage PASSED                      [ 38%]
+test/test_US08.py::test2 PASSED                                          [ 40%]
+test/test_US10.py::test_marriage_wife_minor PASSED                       [ 42%]
+test/test_US10.py::test_marriage_husband_minor PASSED                    [ 44%]
+test/test_US10.py::test_marriage_both_minor PASSED                       [ 46%]
+test/test_US10.py::test_marriage_both_adult PASSED                       [ 48%]
+test/test_US11.py::test_marriage_no_divorce PASSED                       [ 51%]
+test/test_US11.py::test_marriage_with_divorce PASSED                     [ 53%]
+test/test_US12.py::test_old_wife_one_kid PASSED                          [ 55%]
+test/test_US12.py::test_old_husband_one_kid PASSED                       [ 57%]
+test/test_US12.py::test_old_both_one_kid PASSED                          [ 59%]
+test/test_US12.py::test_old_wife_both_kids PASSED                        [ 61%]
+test/test_US12.py::test_old_husband_both_kids PASSED                     [ 63%]
+test/test_US12.py::test_old_both_both_kids PASSED                        [ 65%]
+test/test_US12.py::test_old_none PASSED                                  [ 67%]
+test/test_US13.py::test_less_than_8 PASSED                               [ 69%]
+test/test_US13.py::test_twins PASSED                                     [ 71%]
+test/test_US14.py::test_more_than_five_births PASSED                     [ 73%]
+test/test_US14.py::test_less_than_five_births PASSED                     [ 75%]
+test/test_US14.py::test_five_births PASSED                               [ 77%]
+test/test_US15.py::test_has_15 PASSED                                    [ 79%]
+test/test_US16.py::test_all_same PASSED                                  [ 81%]
+test/test_US16.py::test_married_women PASSED                             [ 83%]
+test/test_US16.py::test_married_men_same PASSED                          [ 85%]
+test/test_US16.py::test_different_son PASSED                             [ 87%]
+test/test_US16.py::test_two_different_sons PASSED                        [ 89%]
+test/test_US16.py::test_married_men_different PASSED                     [ 91%]
+test/test_US17.py::test_descendant_marriage PASSED                       [ 93%]
+test/test_US18.py::test_more_than_five_births PASSED                     [ 95%]
+test/test_US19.py::test_US19 PASSED                                      [ 97%]
+test/test_US20.py::test_US20 PASSED                                      [100%]
+
+=============================== warnings summary ===============================
+../project06/src/parse.py:13
+  /Users/celinaperalta/Documents/School/CS-555/CS-555/gedcom/project08/../project06/src/parse.py:13: DeprecationWarning: invalid escape sequence '\d'
+    re = '(\d{1,2}) ([A-Z]{3}) (\d{4})'
+
+../project06/src/parse.py:34
+  /Users/celinaperalta/Documents/School/CS-555/CS-555/gedcom/project08/../project06/src/parse.py:34: DeprecationWarning: invalid escape sequence '\d'
+    level_re = '^(0|[1-9]+\d*) '
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 49 passed, 2 warnings in 1.46s ========================
