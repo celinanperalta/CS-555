@@ -7,8 +7,8 @@ from src.validator import check_US36
 from util import gedcom_date_to_datetime
 
 def test_US36(capfd):
-    person1 = Individual("F","Kristen Smiles", death=gedcom_date_to_datetime("12 OCT 2022"))
-    person2 = Individual("M", "Jacke Paul", death=gedcom_date_to_datetime("12 OCT 2002"))
+    person1 = Individual("I01","Kristen Smiles", "F", death=gedcom_date_to_datetime("12 OCT 2022"))
+    person2 = Individual("IO2", "Jacke Paul", "M", death=gedcom_date_to_datetime("12 OCT 2002"))
 
     individuals = [person1, person2]
 
