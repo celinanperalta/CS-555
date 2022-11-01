@@ -8,8 +8,8 @@ from util import gedcom_date_to_datetime
 import pprint
 
 def test_US35(capfd):
-    person1 = Individual("Kristen Smiles", "F", birth=gedcom_date_to_datetime("12 OCT 2022"))
-    person2 = Individual("Chris Smiles", "F", birth=gedcom_date_to_datetime("1 JAN 2001"))
+    person1 = Individual("F","Kristen Smiles", birth=gedcom_date_to_datetime("12 OCT 2022"))
+    person2 = Individual("M","Chris Smiles", birth=gedcom_date_to_datetime("1 JAN 2001"))
 
     individuals = [person1, person2]
     check_US35(individuals)
