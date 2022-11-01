@@ -374,6 +374,26 @@ def check_US25(family: Family):
         else:
             seen.add((c.name, c.birth))
 
+# List all orphaned children (both parents dead and child < 18 years old) in a GEDCOM file
+# return: List of orphans
+def check_US33(families, individuals):
+    all_relatives = get_descendants_map(families)
+
+    for family in families:
+        if family.marriage_date is not None:
+            all_relatives[family.husband.id].add(family.wife)
+            all_relatives[family.wife.id].add(family.husband)
+
+    orphans = {}
+    
+    for i in individuals:
+        if i.birth is not None and (datetime.datetime.now() - i.birth).days < 6570:
+            orphans[i.id] = list(filter(lambda x: x.death is not None, all_relatives[i.id]))
+            
+    return orphans
+
+    
+
 # List all couples who were married when the older spouse was more than twice as old as the younger spouse
 # @returns: List of couples [(husband, wife)] where this is true
 def check_US34(families: List[Family]):
@@ -392,6 +412,28 @@ def check_US34(families: List[Family]):
 
     return couples
 
+# List all the people who were born in the last 30 days
+# @returns: List of individuals that were born in the last 30 days
+def check_US35(individuals):
+    just_born = []
+
+    for i in individuals:
+        if i.birth is not None and (datetime.datetime.now() - i.birth).days <= 30:
+            print(consts.MSG_US35.format(i.name))
+            just_born.append(i.name)
+    return just_born
+
+
+# List all the people that died in the last 30 days
+# @returns: List of all deceased individuals
+def check_US36(individuals): 
+    deceased = []
+
+    for i in individuals:
+        if i.death is not None and (datetime.datetime.now() - i.death).days <= 30:
+            print(consts.MSG_US36.format(i.name))
+            deceased.append(i.name)
+    return deceased
 
 # List all living spouses and descendants of people in a GEDCOM file who died in the last 30 days
 # @returns: List of individuals surviving the deceased individual
