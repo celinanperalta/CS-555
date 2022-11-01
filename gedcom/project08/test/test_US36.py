@@ -16,3 +16,5 @@ def test_US36(capfd):
 
     out, err = capfd.readouterr()
     assert out.strip() == consts.MSG_US36.format(person1)
+
+    #blah blah
