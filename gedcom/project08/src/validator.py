@@ -26,8 +26,13 @@ def validate(gedcom):
     check_US17(gedcom.families)
     check_US19(gedcom.families)
     check_US20(gedcom.families)
+    check_US24(gedcom.families)
+
+    # Checks that require entire list of individuals
+    check_US23(gedcom.individuals)
 
     # Checks that need to be listed later
+    check_US22(gedcom.individuals, gedcom.families)
     check_US37(gedcom.individuals, gedcom.families)
     
 # For validations that take singleton objects (i.e. Family, Individual)
@@ -46,6 +51,7 @@ def validate_obj(obj):
         check_US12(obj)
         check_US16(obj)
         check_US13(obj)
+        check_US21(obj)
         check_US25(obj)
 
 
@@ -313,6 +319,49 @@ def check_US20(families):
                 print(consts.MSG_US20.format(c[0], c[1]))
             if (c[1], c[0]) in marriages:
                 print(consts.MSG_US20.format(c[1], c[0]))
+
+# Husband in family should be male and wife in family should be female
+def check_US21(family) -> None:
+    if family.wife is not None and family.wife.sex != "F":
+        print(consts.MSG_US21.format(family.wife, "wife", family.wife.sex))
+    if family.husband is not None and family.husband.sex != "M":
+        print(consts.MSG_US21.format(family.husband, "husband", family.husband.sex))
+
+# All individual IDs should be unique and all family IDs should be unique
+def check_US22(individuals, families) -> None:
+    i_ids = []
+    f_ids = []
+
+    for i in individuals: 
+        if i.id in i_ids:
+            print(consts.MSG_US22.format(i.id, "individual"))
+        else:
+            i_ids.append(i.id)
+    
+    for f in families: 
+        if f.id in f_ids:
+            print(consts.MSG_US22.format(f.id, "family"))
+        else:
+            f_ids.append(f.id)
+
+# No more than one individual with the same name and birth date should appear in a GEDCOM file
+def check_US23(individuals) -> None: 
+    info = []
+
+    for i in individuals: 
+        if (i.name, i.birth) in info:
+            print(consts.MSG_US23.format(i.name, i.birth))
+        else:
+            info.append((i.name, i.birth))
+
+def check_US24(families) -> None: 
+    info = []
+
+    for f in families: 
+        if {f.wife.name, f.husband.name, f.marriage_date} in info:
+            print(consts.MSG_US24.format(f.wife.name, f.husband.name, f.marriage_date))
+        else:
+            info.append({f.wife.name, f.husband.name, f.marriage_date})
 
 # No more than one child with the same name and birth date should appear in a family
 def check_US25(family: Family):
