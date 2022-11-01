@@ -26,4 +26,4 @@ def test_US33():
     orphans = check_US33([family], individuals)
 
     assert "I1" in orphans.keys()
-    assert len(orphans.get("I1")) == 4
+    assert len(orphans.get("I1")) == 0
