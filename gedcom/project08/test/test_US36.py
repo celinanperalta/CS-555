@@ -7,12 +7,12 @@ from src.validator import check_US36
 from util import gedcom_date_to_datetime
 
 def test_US36(capfd):
-    person1 = Individual("I01","Kristen Smiles", "F", death=gedcom_date_to_datetime("12 OCT 2022"))
-    person2 = Individual("IO2", "Jacke Paul", "M", death=gedcom_date_to_datetime("12 OCT 2002"))
+    person1 = Individual("Kristen Smiles", "F", death=gedcom_date_to_datetime("12 OCT 2022"))
+    person2 = Individual("Jacke Paul", "M", death=gedcom_date_to_datetime("12 OCT 2002"))
 
     individuals = [person1, person2]
 
     check_US36(individuals)
 
     out, err = capfd.readouterr()
-    assert out.strip() == consts.MSG_US36.format(person1.name)
+    assert out.strip() == consts.MSG_US36.format(person1[0])

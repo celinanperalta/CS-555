@@ -15,4 +15,4 @@ def test_US35(capfd):
     check_US35(individuals)
 
     out, err = capfd.readouterr()
-    assert out.strip() == consts.MSG_US35.format(person1.name)
+    assert out.strip() == consts.MSG_US35.format(person1[0])
