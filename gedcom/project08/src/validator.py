@@ -379,16 +379,16 @@ def check_US25(family: Family):
 def check_US33(families, individuals):
     all_relatives = get_descendants_map(families)
 
-    # for family in families:
-    #     if family.marriage_date is not None:
-    #         all_relatives[family.husband.id].add(family.wife)
-    #         all_relatives[family.wife.id].add(family.husband)
+    for family in families:
+        if family.marriage_date is not None:
+            all_relatives[family.husband.id].add(family.wife)
+            all_relatives[family.wife.id].add(family.husband)
 
     orphans = {}
     
     for i in individuals:
-        if i.death is not None and (datetime.datetime.now() - i.death).days <= 30:
-            orphans[i.id] = list(filter(lambda x: x.death is None, all_relatives[i.id]))
+        if i.birth is not None and (datetime.datetime.now() - i.birth).years < 18:
+            orphans[i.id] = list(filter(lambda x: x.death is not None, all_relatives[i.id]))
             
     return orphans
 
@@ -419,8 +419,8 @@ def check_US35(individuals):
 
     for i in individuals:
         if i.birth is not None and (datetime.datetime.now() - i.birth).days <= 30:
-            print(consts.MSG_US35.format(individual.id))
-            deceased.append(individual.id)
+            print(consts.MSG_US35.format(i.id))
+            just_born.append(i.id)
     return just_born
 
 
@@ -431,8 +431,8 @@ def check_US36(individuals):
 
     for i in individuals:
         if i.death is not None and (datetime.datetime.now() - i.death).days <= 30:
-            print(consts.MSG_US36.format(individual.id))
-            deceased.append(individual.id)
+            print(consts.MSG_US36.format(i.id))
+            deceased.append(i.id)
     return deceased
 
 # List all living spouses and descendants of people in a GEDCOM file who died in the last 30 days
