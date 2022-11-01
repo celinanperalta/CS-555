@@ -387,7 +387,7 @@ def check_US33(families, individuals):
     orphans = {}
     
     for i in individuals:
-        if i.birth is not None and (datetime.datetime.now() - i.birth).years < 18:
+        if i.birth is not None and (datetime.datetime.now() - i.birth).days < 6570:
             orphans[i.id] = list(filter(lambda x: x.death is not None, all_relatives[i.id]))
             
     return orphans
