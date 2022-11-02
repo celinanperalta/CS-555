@@ -34,6 +34,10 @@ def validate(gedcom):
     # Checks that need to be listed later
     check_US22(gedcom.individuals, gedcom.families)
     check_US37(gedcom.individuals, gedcom.families)
+    check_US30(gedcom.individuals, gedcom.families)
+
+    #checks that require list of individuals
+    check_US31(gedcom.individuals)
     
 # For validations that take singleton objects (i.e. Family, Individual)
 def validate_obj(obj):
@@ -452,6 +456,34 @@ def check_US37(families, individuals):
             survivors[i.id] = list(filter(lambda x: x.death is None, all_relatives[i.id]))
 
     return survivors
+
+#list all the married
+#returns a list of all indiviuals that are alive and married
+def check_US30(families, individuals):
+    all_relatives = get_descendants_map(families)
+
+    for family in families:
+        if family.marriage_date is not None and family.divorce_date is None:
+            all_relatives[family.husband.id].add(family.wife)
+            all_relatives[family.wife.id].add(family.husband)
+    # print(all_relatives)
+    livingCouples = {}
+    
+    for i in individuals:
+        if i.death is None:
+            livingCouples[i.id] = list(filter(lambda x: x.death is None, all_relatives[i.id]))
+    return livingCouples
+
+#list all the single
+def check_US31(individuals):
+    single = []
+    curr_date = datetime.datetime.now()
+
+    for i in individuals:
+        if i.fams is None and (curr_date - i.birth) > datetime.timedelta(days = 365 * 30) :
+            single.append(i.id)
+
+    return single
     
     
 
