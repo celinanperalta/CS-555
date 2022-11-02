@@ -30,6 +30,9 @@ def validate(gedcom):
     # Checks that need to be listed later
     check_US37(gedcom.individuals, gedcom.families)
     check_US30(gedcom.individuals, gedcom.families)
+
+    #checks that require list of individuals
+    check_US31(gedcom.individuals)
     
 # For validations that take singleton objects (i.e. Family, Individual)
 def validate_obj(obj):
@@ -366,34 +369,30 @@ def check_US37(families, individuals):
 #list all the married
 #returns a list of all indiviuals that are alive and married
 def check_US30(families, individuals):
-    marriage_dict = US11_get_marriage_dict(families) #gets a dictionary of all the marriages
-    livingCouples = {}
+    all_relatives = get_descendants_map(families)
 
     for family in families:
         if family.marriage_date is not None and family.divorce_date is None:
-            marriage_dict[family.husband.id] = (family.wife)
-            marriage_dict[family.wife.id] = (family.husband)
-    print(marriage_dict)
+            all_relatives[family.husband.id].add(family.wife)
+            all_relatives[family.wife.id].add(family.husband)
+    # print(all_relatives)
+    livingCouples = {}
+    
     for i in individuals:
-        if i.death is not None:
-            livingCouples[i.id] = list(filter(lambda x: x.death is None, marriage_dict[i.id]))
-    print(livingCouples)
+        if i.death is None:
+            livingCouples[i.id] = list(filter(lambda x: x.death is None, all_relatives[i.id]))
     return livingCouples
 
 #list all the single
-def check_US31(families, individuals):
-    single = {}
-    livingSingle = {}
-
-    for family in families:
-        if family.marriage_date is None:
-            single[family.id].add(family.individual)
+def check_US31(individuals):
+    single = []
+    curr_date = datetime.datetime.now()
 
     for i in individuals:
-        if i.death is not None:
-            livingSingle[i.id] = list(filter(lambda x: x.death is None, single[i.id]))
+        if i.fams is None and (curr_date - i.birth) > datetime.timedelta(days = 365 * 30) :
+            single.append(i.id)
 
-    return livingSingle
+    return single
     
     
 
