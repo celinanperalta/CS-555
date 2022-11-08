@@ -437,6 +437,43 @@ def check_US31(individuals):
 
     return single
 
+# All family roles (spouse, child) specified in an individual record should have corresponding entries in the corresponding family records. 
+# Likewise, all individual roles (spouse, child) specified in family records should have corresponding entries in the corresponding individual's records.  
+# I.e. the information in the individual and family records should be consistent.
+def check_US26(families, individuals):
+    individuals_set = set()
+    families_set = set()
+
+    for i in individuals:
+        for x in i.fams:
+            individuals_set.add((i.id, "S", x)) 
+        for x in i.famc:
+            individuals_set.add((i.id, "C", x))
+
+    for f in families:
+        if f.husband:
+            families_set.add(f.husband.id, "S", f.id)
+        if f.wife:
+            families_set.add(f.wife.id, "S", f.id)
+        for x in f.children:
+            families_set.add((x.id, "C", f.id))
+
+    difference = individuals_set.symmetric_difference(families_set)
+
+    for d in difference:
+        individual = d[0]
+        record_type = "spouse" if d[1] == "S" else "child"
+        family = d[2]
+        print(consts.MSG_US26.format(individual, record_type, family))
+
+# List line numbers from GEDCOM source file when reporting errors
+def check_US40():
+    pass
+
+# Accept and use dates without days or without days and months
+def check_US41():
+    pass
+
 #
 #   List and run validations here
 #

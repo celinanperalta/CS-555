@@ -3,14 +3,14 @@ from typing import List
 
 
 class Individual:
-    def __init__(self, id, name = None, sex = None, birth = None, death = None, famc = None, fams = None) -> None:
+    def __init__(self, id, name = None, sex = None, birth = None, death = None, famc = [], fams = []) -> None:
         self.id = id
         self.name = name
         self.sex = sex
         self.birth = birth
         self.death = death
-        self.famc = famc
-        self.fams = fams
+        self.famc = []
+        self.fams = []
 
     def set_name(self, name):
         self.name = name.replace("/", "")
@@ -25,10 +25,14 @@ class Individual:
         self.death = gedcom_date_to_datetime(death)
     
     def set_famc(self, famc):
-        self.famc = famc
+        self.famc.clear()
+        for x in famc:
+            self.famc.append(x)
 
     def set_fams(self, fams):
-        self.fams = fams
+        self.fams.clear()
+        for x in fams:
+            self.fams.append(x)
 
     def to_table_row(self):
         return [self.id, self.name, self.sex, self.birth, self.death, self.famc, self.fams]
