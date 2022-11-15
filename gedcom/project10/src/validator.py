@@ -470,10 +470,6 @@ def check_US26(families, individuals):
 def check_US40():
     pass
 
-# Accept and use dates without days or without days and months
-def check_US41():
-    pass
-
 #
 #   List and run validations here
 #

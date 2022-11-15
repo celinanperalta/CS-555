@@ -8,12 +8,25 @@ import consts
 def is_valid_tag(tag):
     return tag in consts.TAGS
 
+# US41 Accept and use dates without days or without days and months
 def is_valid_date(date):
     # Very lax check on date format
     re = '(\d{1,2}) ([A-Z]{3}) (\d{4})'
     match = regex.match(re, date)
-    if match is None or match.groups()[1] not in consts.MONTHS.keys():
-        return f"Error: Bad date {date}"
+    if match and match.groups()[1] in consts.MONTHS.keys():
+        return True
+    
+    re = '([A-Z]{3}) (\d{4})'
+    match = regex.match(re, date)
+    if match and match.groups()[0] in consts.MONTHS.keys():
+        return True
+
+    re = '(\d{4})'
+    match = regex.match(re, date)
+    if match:
+        return True
+
+    return False
 
 # Input: [level, tag, args, ident] from GEDCOM file
 # Output: True if valid
