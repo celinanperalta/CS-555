@@ -4,6 +4,7 @@ from collections import defaultdict, deque
 from functools import reduce
 from itertools import combinations, permutations, product
 from typing import List
+from tabulate import tabulate
 
 from dateutil import relativedelta
 
@@ -20,7 +21,7 @@ def validate(gedcom):
 
     # Checks that require entire list of families
     FAMILY_LIST_CHECKS = [check_US11,  check_US17,
-                          check_US19,  check_US20,  check_US24]
+                          check_US19,  check_US20,  check_US24, check_US34]
 
     # Checks that require entire list of individuals
     INDIVIDUAL_LIST_CHECKS = [check_US23,  check_US31]
@@ -58,7 +59,7 @@ def validate(gedcom):
 
     for check in GEDCOM_CHECKS:
         if check not in SKIP:
-            check(gedcom.families,  gedcom.individuals)
+            check(gedcom.families, gedcom.individuals)
 
 
 def check_US01(obj):
@@ -298,10 +299,10 @@ def check_US17(families: List[Family]):
         if family.husband is None or family.wife is None:
             continue
         husband_descendants = list(
-            map(lambda x: x.id, descendants[family.husband.id]))
+            map(lambda x: x, descendants[family.husband]))
         wife_descendants = list(
-            map(lambda x: x.id, descendants[family.wife.id]))
-        if family.husband.id in wife_descendants or family.wife.id in husband_descendants:
+            map(lambda x: x, descendants[family.wife]))
+        if family.husband in wife_descendants or family.wife in husband_descendants:
             print(consts.MSG_US17.format(family.husband, family.wife))
 
 # marriage after 14 for both spouses
@@ -497,6 +498,13 @@ def check_US34(families: List[Family]):
                     family.wife.id, family.husband.id))
                 couples.append((family.husband, family.wife))
 
+    table = [["Couples with Large Age Difference"]]
+
+    for couple in couples:
+        table.append(couple)
+    
+    print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
+
     return couples
 
 # List all the people who were born in the last 30 days
@@ -543,6 +551,14 @@ def check_US37(families, individuals):
         if i.death is not None and (datetime.datetime.now() - i.death).days <= 30:
             survivors[i] = list(
                 filter(lambda x: x.death is None, all_relatives[i]))
+
+    table = [["Deceased", "Survivors"]]
+
+    for k,v in survivors.items():
+        table.append([str(k), [str(x) for x in v]])
+    
+    print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
+
 
     return survivors
 

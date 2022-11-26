@@ -49,7 +49,7 @@ test/test_US16.py::test_married_men_different PASSED                     [ 57%]
 test/test_US17.py::test_descendant_marriage FAILED                       [ 58%]
 test/test_US18.py::test_more_than_five_births FAILED                     [ 60%]
 test/test_US19.py::test_US19 PASSED                                      [ 61%]
-test/test_US20.py::test_US20 FAILED                                      [ 62%]
+test/test_US20.py::test_US20 PASSED                                      [ 62%]
 test/test_US21.py::test_wife_m PASSED                                    [ 64%]
 test/test_US21.py::test_husband_f PASSED                                 [ 65%]
 test/test_US21.py::test_wife_m_husband_f PASSED                          [ 66%]
@@ -83,7 +83,7 @@ test/test_US41.py::test_gedcom_date_2 PASSED                             [100%]
 =================================== FAILURES ===================================
 ___________________________ test_descendant_marriage ___________________________
 
-capfd = <_pytest.capture.CaptureFixture object at 0x12b5a6620>
+capfd = <_pytest.capture.CaptureFixture object at 0x126b2aa40>
 
     def test_descendant_marriage(capfd):
         i1 = Individual("I01", "A", "M", gedcom_date_to_datetime("1 JAN 2022"))
@@ -98,14 +98,14 @@ capfd = <_pytest.capture.CaptureFixture object at 0x12b5a6620>
         check_US17([family, family2])
     
         out, err = capfd.readouterr()
->       assert out.strip() == consts.MSG_US17.format(i1.id, i3.id)
-E       AssertionError: assert '' == 'Anomaly US17...ancestor I03.'
-E         - Anomaly US17: I01 is married to descendant/ancestor I03.
+>       assert out.strip() == consts.MSG_US17.format(i1, i3)
+E       AssertionError: assert '' == 'Anomaly US17...stor A (I03).'
+E         - Anomaly US17: A (I01) is married to descendant/ancestor A (I03).
 
 test/test_US17.py:25: AssertionError
 __________________________ test_more_than_five_births __________________________
 
-capfd = <_pytest.capture.CaptureFixture object at 0x12b5fab90>
+capfd = <_pytest.capture.CaptureFixture object at 0x126b8ec20>
 
     def test_more_than_five_births(capfd):
         mom = Individual("I01", datetime.datetime(1979, 10, 12) + datetime.timedelta(days=1))
@@ -126,8 +126,8 @@ capfd = <_pytest.capture.CaptureFixture object at 0x12b5fab90>
 test/test_US18.py:25: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <model.Individual object at 0x12b5fa710>
-fams = <model.Family object at 0x12b5fa590>
+self = <model.Individual object at 0x126b8e6e0>
+fams = <model.Family object at 0x126b8e2f0>
 
     def set_fams(self, fams):
         self.fams.clear()
@@ -135,24 +135,9 @@ fams = <model.Family object at 0x12b5fa590>
 E       TypeError: 'Family' object is not iterable
 
 src/model.py:37: TypeError
-__________________________________ test_US20 ___________________________________
-
-capfd = <_pytest.capture.CaptureFixture object at 0x12b623e50>
-
-    def test_US20(capfd):
-        entries = []
-        with open("data/us_20.ged") as file:
-            entries = file.readlines()
-        gedcom = GEDCOM(entries)
-        check_US20(gedcom.families)
-        out, err = capfd.readouterr()
->       assert out.strip().contains("I9") and out.strip().contains("I1")
-E       AttributeError: 'str' object has no attribute 'contains'
-
-test/test_US20.py:15: AttributeError
 ________________________________ test_same_i_id ________________________________
 
-capfd = <_pytest.capture.CaptureFixture object at 0x12b6236a0>
+capfd = <_pytest.capture.CaptureFixture object at 0x126bb3a00>
 
     def test_same_i_id(capfd):
         wife1 = Individual("I01", "Jane Doe", "F", datetime.datetime.now())
@@ -179,7 +164,7 @@ E         ?                                 +++  +
 test/test_US22.py:23: AssertionError
 ________________________________ test_same_f_id ________________________________
 
-capfd = <_pytest.capture.CaptureFixture object at 0x12b6226e0>
+capfd = <_pytest.capture.CaptureFixture object at 0x126b2bbb0>
 
     def test_same_f_id(capfd):
         wife1 = Individual("I01", "Jane Doe", "F", datetime.datetime.now())
@@ -206,7 +191,7 @@ E         ?                                 ^^^^^^^^
 test/test_US22.py:40: AssertionError
 _____________________________ test_same_f_and_i_id _____________________________
 
-capfd = <_pytest.capture.CaptureFixture object at 0x12b5fa830>
+capfd = <_pytest.capture.CaptureFixture object at 0x126bb2aa0>
 
     def test_same_f_and_i_id(capfd):
         wife1 = Individual("I01", "Jane Doe", "F", datetime.datetime.now())
@@ -238,7 +223,7 @@ E         ...Full output truncated (2 lines hidden), use '-vv' to show
 test/test_US22.py:57: AssertionError
 ___________________________ test_same_name_and_birth ___________________________
 
-capfd = <_pytest.capture.CaptureFixture object at 0x12b5a7c70>
+capfd = <_pytest.capture.CaptureFixture object at 0x126c2f790>
 
     def test_same_name_and_birth(capfd):
         wife1 = Individual("I01", "Jane Doe", "F", gedcom_date_to_datetime("2 AUG 2022"))
@@ -259,7 +244,7 @@ E         - Anomaly US23: More than one individual with identical name and birth
 test/test_US23.py:20: AssertionError
 __________________________________ test_US26 ___________________________________
 
-capfd = <_pytest.capture.CaptureFixture object at 0x12b66b9a0>
+capfd = <_pytest.capture.CaptureFixture object at 0x126b8c070>
 
     def test_US26(capfd):
     
@@ -285,8 +270,8 @@ E       AssertionError: assert 'Error US26: ...r family F01.' == 'Error US26: ..
 E         - Error US26: Balbert (I3) has inconsistent records as a child for family F01.
 E         + Error US26: Balbert (I3) has inconsistent records as a child for family F01.
 E         ?                                                                             +
-E         + Error US26: Albert (I1) has inconsistent records as a child for family F01.
 E         + Error US26: Balbert (I2) has inconsistent records as a child for family F01.
+E         + Error US26: Albert (I1) has inconsistent records as a child for family F01.
 E         + Error US26: Albert (I0) has inconsistent records as a child for family F01.
 E         + Error US26: Albert (I0) has inconsistent records as a child for family F01....
 E         
@@ -317,7 +302,7 @@ E       AssertionError: assert 'I4' in []
 test/test_US31.py:26: AssertionError
 __________________________________ test_US35 ___________________________________
 
-capfd = <_pytest.capture.CaptureFixture object at 0x12b668910>
+capfd = <_pytest.capture.CaptureFixture object at 0x126b8dcc0>
 
     def test_US35(capfd):
         person1 = Individual("I01", "Kristen Smiles", "F", birth=gedcom_date_to_datetime("12 OCT 2022"))
@@ -334,7 +319,7 @@ E         - Anomaly US35: Kristen Smiles was just born in the past 30 days.
 test/test_US35.py:18: AssertionError
 __________________________________ test_US36 ___________________________________
 
-capfd = <_pytest.capture.CaptureFixture object at 0x12b669e10>
+capfd = <_pytest.capture.CaptureFixture object at 0x126b8f760>
 
     def test_US36(capfd):
         person1 = Individual("I01","Kristen Smiles", "F", death=gedcom_date_to_datetime("12 OCT 2022"))
@@ -353,7 +338,6 @@ test/test_US36.py:18: AssertionError
 =========================== short test summary info ============================
 FAILED test/test_US17.py::test_descendant_marriage - AssertionError: assert '...
 FAILED test/test_US18.py::test_more_than_five_births - TypeError: 'Family' ob...
-FAILED test/test_US20.py::test_US20 - AttributeError: 'str' object has no att...
 FAILED test/test_US22.py::test_same_i_id - AssertionError: assert 'Error US22...
 FAILED test/test_US22.py::test_same_f_id - AssertionError: assert 'Error US22...
 FAILED test/test_US22.py::test_same_f_and_i_id - AssertionError: assert 'Erro...
@@ -362,4 +346,4 @@ FAILED test/test_US26.py::test_US26 - AssertionError: assert 'Error US26: ......
 FAILED test/test_US31.py::test_US31 - AssertionError: assert 'I4' in []
 FAILED test/test_US35.py::test_US35 - AssertionError: assert '' == 'Anomaly U...
 FAILED test/test_US36.py::test_US36 - AssertionError: assert '' == 'Anomaly U...
-======================== 11 failed, 67 passed in 0.77s =========================
+======================== 10 failed, 68 passed in 0.89s =========================
