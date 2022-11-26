@@ -8,7 +8,6 @@ import parse as parser
 import validator as validator
 from model import Family, Individual
 
-
 class GEDCOM:
     def __init__(self, entries):
         self.entries = entries
@@ -82,13 +81,14 @@ class GEDCOM:
                         if (self.__is_date_entry(self.df.loc[i])):
                             individual.set_death(self.df.loc[i]['args'])
                     elif tag == consts.GEDCOM_TAG_FAMC:
-                        individual.set_famc(args)
+                        individual.add_famc(args)
                     elif tag == consts.GEDCOM_TAG_FAMS:
-                        individual.set_fams(args)
+                        individual.add_fams(args)
                     i += 1
                 self.individuals.append(individual)
             if (i < len(self.df) and self.df.loc[i]['tag'] != consts.GEDCOM_TAG_INDI):
                 i += 1
+        
 
     def get_individual(self, id):
         result = list(filter(lambda x: x.id == id, self.individuals))
@@ -105,6 +105,7 @@ class GEDCOM:
                     subentry = self.df.loc[i]
                     tag, args = subentry['tag'], subentry['args']
                     if tag == consts.GEDCOM_TAG_MARR:
+                        family.ln_marriage = i
                         i += 1
                         if (self.__is_date_entry(self.df.loc[i])):
                             family.set_marriage_date(self.df.loc[i]['args'])
@@ -117,6 +118,7 @@ class GEDCOM:
                         if child is not None:
                             family.add_child(child)
                     elif tag == consts.GEDCOM_TAG_DIV:
+                        family.ln_divorce = i
                         i += 1
                         if (self.__is_date_entry(self.df.loc[i])):
                             family.set_divorce_date(self.df.iloc[i]['args'])
@@ -124,9 +126,7 @@ class GEDCOM:
                 self.families.append(family)
             if (i < len(self.df) and self.df.loc[i]['tag'] != consts.GEDCOM_TAG_FAM):
                 i += 1
-    
-    def validate_entities(self):
-        validator.validate(self)
+
         
 
 

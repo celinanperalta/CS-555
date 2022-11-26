@@ -30,4 +30,4 @@ def test_more_than_five_births(capfd):
     check_US18(obj)
     out, err = capfd.readouterr()
     print(out.strip())
-    assert out.strip() == consts.MSG_US18.format((obj.children[1].id))
+    assert out.strip() == consts.MSG_US18.format((obj.children[1]))

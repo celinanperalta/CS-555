@@ -23,8 +23,10 @@ def get_descendants_map(families):
     descendant_dict = defaultdict(lambda: set())
 
     for family in families:
-        descendant_dict[family.husband.id].update(family.children)
-        descendant_dict[family.wife.id].update(family.children)
+        if family.husband is None or family.wife is None:
+            continue
+        descendant_dict[family.husband].update(family.children)
+        descendant_dict[family.wife].update(family.children)
 
     new_dict = defaultdict(lambda: set())
 
@@ -39,7 +41,7 @@ def get_descendants_map(families):
                 u = dq.popleft()
                 reachable.append(u)
 
-                for itr in descendant_dict[u.id]:
+                for itr in descendant_dict[u]:
                     if itr.id not in seen:
                         seen.add(itr.id)
                         dq.append(itr)

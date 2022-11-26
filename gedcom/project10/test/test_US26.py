@@ -25,4 +25,4 @@ def test_US26(capfd):
     check_US26([family], individuals)
 
     out, err = capfd.readouterr()
-    assert out.strip() == consts.MSG_US26.format(i3.id, "child", family.id)
+    assert out.strip() == consts.MSG_US26.format(i3, "child", family)

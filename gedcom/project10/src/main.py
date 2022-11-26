@@ -2,6 +2,7 @@
 
 import argparse
 from gedcom import GEDCOM
+from validator import validate
 
 def main():
     parser = argparse.ArgumentParser(
@@ -19,7 +20,7 @@ def main():
     gedcom.print_individuals()
     gedcom.print_families()
 
-    gedcom.validate_entities()
+    validate(gedcom)
 
 
     return 0

@@ -29,10 +29,16 @@ class Individual:
         for x in famc:
             self.famc.append(x)
 
+    def add_famc(self, x):
+        self.famc.append(x)
+
     def set_fams(self, fams):
         self.fams.clear()
         for x in fams:
             self.fams.append(x)
+
+    def add_fams(self, x):
+        self.fams.append(x)
 
     def to_table_row(self):
         return [self.id, self.name, self.sex, self.birth, self.death, self.famc, self.fams]
@@ -74,8 +80,8 @@ class Family:
 
     # For pretty printing families
     def to_table_row(self):
-        return [self.id, self.husband.name, self.wife.name, [x.id for x in self.children], self.marriage_date, self.divorce_date]
+        return [self.id, self.husband.name if self.husband else "None", self.wife.name if self.wife else "None", [x.id for x in self.children], self.marriage_date, self.divorce_date]
     
     def __str__(self):
-        return f"{self.id} {self.husband.name} {self.wife.name}"
+        return f"{self.id}"
 
