@@ -50,7 +50,7 @@ class GEDCOM:
         print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
     
     def print_individuals(self):
-        table = [["ID", "Name", "Sex", "Birth", "Death", "FAMC", "FAMS"]]
+        table = [["ID", "Name", "Sex", "Birth", "Death", "FAMC", "FAMS", "Age"]]
         for individual in self.individuals:
             table.append(individual.to_table_row())
         print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
