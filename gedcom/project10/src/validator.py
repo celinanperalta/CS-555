@@ -11,7 +11,7 @@ from dateutil import relativedelta
 import consts
 
 from model import Family, Individual
-from util import get_descendants_map, is_date_overlap, get_relativedelta, get_age_in_years
+from util import get_descendants_map, is_date_overlap, get_relativedelta, get_age_in_years, get_marriage_length_in_years
 
 
 def validate(gedcom):
@@ -21,10 +21,10 @@ def validate(gedcom):
 
     # Checks that require entire list of families
     FAMILY_LIST_CHECKS = [check_US11,  check_US17,
-                          check_US19,  check_US20,  check_US24, check_US34]
+                          check_US19,  check_US20,  check_US24, check_US34, checkUS39]
 
     # Checks that require entire list of individuals
-    INDIVIDUAL_LIST_CHECKS = [check_US23,  check_US31]
+    INDIVIDUAL_LIST_CHECKS = [check_US23,  check_US31, check_US38]
 
     # Checks that need to be listed in output
     GEDCOM_CHECKS = [check_US22,  check_US37,  check_US30]
@@ -625,3 +625,35 @@ def check_US26(families, individuals):
         record_type = "spouse" if d[1] == "S" else "child"
         family = d[2]
         print(consts.MSG_US26.format(individual, record_type, family))
+
+# List all living people in a GEDCOM file whose birthdays occur in the next 30 days
+# @returns: Table in list format
+
+def check_US38(individuals):
+    table = [["Name", "Upcoming Birthday"]]
+    for individual in individuals:
+        if (individual.birth):
+            age = get_age_in_years(individual)
+            time_until_birthday = ((individual.birth + relativedelta.relativedelta(years=age+1)) - datetime.datetime.now()).days
+            if (time_until_birthday > 364):
+                time_until_birthday = time_until_birthday - 364
+            if (time_until_birthday <= 30 and time_until_birthday >= 0):
+                table.append([individual.name, individual.birth.strftime('%m-%d')])
+    print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
+    return table
+    
+# List all living couples in a GEDCOM file whose marriage anniversaries occur in the next 30 days
+# @returns: Table in list format
+
+def check_US39(families):
+    table = [["Husband", "Wife", " Upcoming Anniversary"]]
+    for family in families:
+        if (family.marriage_date):
+            marriage_length = get_marriage_length_in_years(family)
+            time_until_anniversary = ((family.marriage_date + relativedelta.relativedelta(years=marriage_length+1)) - datetime.datetime.now()).days
+            if (time_until_anniversary > 364):
+                time_until_anniversary = time_until_anniversary - 364
+            if (time_until_anniversary <= 30 and time_until_anniversary >= 0):
+                table.append([family.husband.name, family.wife.name, family.marriage_date.strftime('%m-%d')])
+    print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
+    return table

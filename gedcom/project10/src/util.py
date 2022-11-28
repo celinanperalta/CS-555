@@ -70,3 +70,6 @@ def get_children_of_individuals(families):
 
 def get_age_in_years(i):
     return abs(relativedelta.relativedelta(i.birth, datetime.datetime.now()).years)
+
+def get_marriage_length_in_years(f):
+    return abs(relativedelta.relativedelta(f.marriage_date, datetime.datetime.now()).years)
