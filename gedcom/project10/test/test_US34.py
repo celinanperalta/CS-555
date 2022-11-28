@@ -16,7 +16,7 @@ def test_US34_husband_older(capfd):
     check_US34([family])
 
     out, err = capfd.readouterr()
-    assert out.strip() == consts.MSG_US34.format("I0", "I1")
+    assert consts.MSG_US34.format("I0", "I1") in out.strip()
 
 def test_US34_wife_older(capfd):
 
@@ -28,4 +28,4 @@ def test_US34_wife_older(capfd):
     check_US34([family])
 
     out, err = capfd.readouterr()
-    assert out.strip() == consts.MSG_US34.format("I1", "I0")
+    assert consts.MSG_US34.format("I1", "I0") in out.strip()

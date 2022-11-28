@@ -612,11 +612,11 @@ def check_US26(families, individuals):
 
     for f in families:
         if f.husband:
-            families_set.add(f.husband, "S", f)
+            families_set.add(f.husband, "S", f.id)
         if f.wife:
-            families_set.add(f.wife, "S", f)
+            families_set.add(f.wife, "S", f.id)
         for x in f.children:
-            families_set.add((x, "C", f))
+            families_set.add((x, "C", f.id))
 
     difference = individuals_set.symmetric_difference(families_set)
 
