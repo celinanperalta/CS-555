@@ -403,13 +403,13 @@ def check_US21(family) -> None:
 # All individual IDs should be unique and all family IDs should be unique
 
 
-def check_US22(families, individuals) -> None:
+def check_US22(individuals, families) -> None:
     i_ids = []
     f_ids = []
 
     for i in individuals:
         if i.id in i_ids:
-            print(consts.MSG_US22.format(i, "individual"))
+            print(consts.MSG_US22.format(i.id, "individual"))
         else:
             i_ids.append(i.id)
 
@@ -427,9 +427,9 @@ def check_US23(individuals) -> None:
 
     for i in individuals:
         if (i.name, i.birth) in info:
-            print(consts.MSG_US23.format(i, i.birth))
+            print(consts.MSG_US23.format(i.name, i.birth))
         else:
-            info.append((i, i.birth))
+            info.append((i.name, i.birth))
 
 
 def check_US24(families) -> None:
