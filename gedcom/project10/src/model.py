@@ -1,5 +1,6 @@
 from util import gedcom_date_to_datetime
 from typing import List
+from util import get_age_in_years
 
 
 class Individual:
@@ -41,7 +42,7 @@ class Individual:
         self.fams.append(x)
 
     def to_table_row(self):
-        return [self.id, self.name, self.sex, self.birth, self.death, self.famc, self.fams]
+        return [self.id, self.name, self.sex, self.birth, self.death, self.famc, self.fams, get_age_in_years(self)]
 
     def __str__(self):
         return f"{self.name} ({self.id})"

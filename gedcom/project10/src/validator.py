@@ -21,7 +21,7 @@ def validate(gedcom):
 
     # Checks that require entire list of families
     FAMILY_LIST_CHECKS = [check_US11,  check_US17,
-                          check_US19,  check_US20,  check_US24, check_US34, checkUS39]
+                          check_US19,  check_US20,  check_US24, check_US34, check_US39]
 
     # Checks that require entire list of individuals
     INDIVIDUAL_LIST_CHECKS = [check_US23,  check_US31, check_US38]
