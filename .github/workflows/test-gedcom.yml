@@ -19,4 +19,4 @@ jobs:
         working-directory: ${{env.working-directory}}
         run: |
           pip install -r requirements.txt
-          pytest
+          python -m pytest --no-header -vv

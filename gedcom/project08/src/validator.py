@@ -378,6 +378,7 @@ def check_US25(family: Family):
         else:
             seen.add((c.name, c.birth))
 
+
 # List all orphaned children (both parents dead and child < 18 years old) in a GEDCOM file
 # return: List of orphans
 def check_US33(families, individuals):
@@ -484,8 +485,12 @@ def check_US31(individuals):
             single.append(i.id)
 
     return single
+<<<<<<< HEAD
     
  
+=======
+
+>>>>>>> 49638562995d2690edbabd24a9ee1b781335c2fa
 
     
     

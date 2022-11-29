@@ -22,4 +22,4 @@ def test_descendant_marriage(capfd):
     check_US17([family, family2])
 
     out, err = capfd.readouterr()
-    assert out.strip() == consts.MSG_US17.format(i1.id, i3.id)
+    assert out.strip() == consts.MSG_US17.format(i1, i3)

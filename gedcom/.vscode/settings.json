@@ -1,5 +1,5 @@
 {
     "python.analysis.extraPaths": [
-        "./project04/src"
+        "./project10/src"
     ]
 }
