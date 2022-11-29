@@ -1,7 +1,9 @@
 import datetime
-import consts
 from collections import defaultdict, deque
+
 from dateutil import relativedelta
+
+import consts
 
 
 def gedcom_date_to_datetime(d):
@@ -14,8 +16,10 @@ def gedcom_date_to_datetime(d):
     else:
         return datetime.datetime(int(d[0]), 1, 1)
 
+
 def is_date_overlap(d1_start, d1_end, d2_start, d2_end):
     return not (d1_start < d2_end and d1_end > d2_start)
+
 
 # families: gedcom Family object list
 # returns: dictionary of id -> descendants
@@ -37,7 +41,7 @@ def get_descendants_map(families):
             dq = deque()
             reachable = []
             dq.append(item)
-            while (len(dq) > 0):
+            while len(dq) > 0:
                 u = dq.popleft()
                 reachable.append(u)
 
@@ -48,7 +52,7 @@ def get_descendants_map(families):
 
             new_dict[k].update(descendant_dict[k])
             new_dict[k].update(reachable)
-    
+
     return new_dict
 
 
@@ -59,17 +63,22 @@ def get_relativedelta(d1, d2):
 
     return days, months
 
+
 def get_children_of_individuals(families):
     marriages = []
     children_map = defaultdict(lambda: [])
     for family in families:
-        if (family.marriage_date is not None):
+        if family.marriage_date is not None:
             marriages += [(family.husband.id, family.wife.id)]
         children_map[family.husband.id] += family.children
         children_map[family.wife.id] += family.children
 
+
 def get_age_in_years(i):
     return abs(relativedelta.relativedelta(i.birth, datetime.datetime.now()).years)
 
+
 def get_marriage_length_in_years(f):
-    return abs(relativedelta.relativedelta(f.marriage_date, datetime.datetime.now()).years)
+    return abs(
+        relativedelta.relativedelta(f.marriage_date, datetime.datetime.now()).years
+    )

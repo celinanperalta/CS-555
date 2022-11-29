@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 
 import argparse
+
 from gedcom import GEDCOM
 from validator import validate
 
+
 def main():
-    parser = argparse.ArgumentParser(
-        description="CS-555 GEDCOM Parser", prog="main.py")
-    parser.add_argument("--file", type=argparse.FileType('r'),
-                        help="Name of GEDCOM file to read.")
+    parser = argparse.ArgumentParser(description="CS-555 GEDCOM Parser", prog="main.py")
+    parser.add_argument(
+        "--file", type=argparse.FileType("r"), help="Name of GEDCOM file to read."
+    )
     args = parser.parse_args()
 
     entries = []
@@ -21,7 +23,6 @@ def main():
     gedcom.print_families()
 
     validate(gedcom)
-
 
     return 0
 

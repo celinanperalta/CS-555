@@ -7,7 +7,7 @@ install:
 	$(PIPEX) install -r requirements.txt
 
 run-tests:
-	$(PYTHON3EX) -m pytest --no-header -v > tests.txt
+	$(PYTHON3EX) -m pytest --no-header -vv > tests.txt
 
 run-demo:
 	$(PYTHONEX) src/main.py --file data/demo_sprint2.ged
