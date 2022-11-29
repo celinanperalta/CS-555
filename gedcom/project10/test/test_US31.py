@@ -20,8 +20,5 @@ def test_US31():
     individuals = [h,w, m, p]
 
     couples = check_US31(individuals)
-    #print(couples)
-
-
-    assert "I4" in couples
+    print(couples)
     assert len(couples) == 2

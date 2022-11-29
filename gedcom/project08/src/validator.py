@@ -485,7 +485,7 @@ def check_US31(individuals):
 
     return single
     
-    
+ 
 
     
     

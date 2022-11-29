@@ -148,16 +148,16 @@ def check_US18(family) -> None:
     siblingMarriage = {}
 
     for i in sibling:
-        if(i.fams is not None):
-            if(i.fams not in siblingMarriage):
-                siblingMarriage[i.fams] = 1 
+        if(len(i.fams) > 0):
+            if(i not in siblingMarriage):
+                siblingMarriage[i] = 1 
                 #print(i)
                 #print(siblingMarriage)
             else:
-                siblingMarriage[i.fams] += 1
+                siblingMarriage[i] += 1
                 #print(i)
                 #print(siblingMarriage)
-            if(siblingMarriage[i.fams] > 1):
+            if(siblingMarriage[i] > 1):
                 print(consts.MSG_US18.format(str(i.id)))
 
 
@@ -383,12 +383,12 @@ def check_US35(individuals):
 # List all the people that died in the last 30 days
 # @returns: List of all deceased individuals
 def check_US36(individuals): 
-    deceased = []
+    deceased = {}
 
     for i in individuals:
         if i.death is not None and (datetime.datetime.now() - i.death).days <= 30:
             print(consts.MSG_US36.format(i.name))
-            deceased.append(i.name)
+        deceased[i] = i.name
     return deceased
 
 # List all living spouses and descendants of people in a GEDCOM file who died in the last 30 days
@@ -432,8 +432,8 @@ def check_US31(individuals):
     curr_date = datetime.datetime.now()
 
     for i in individuals:
-        if i.fams is None and (curr_date - i.birth) > datetime.timedelta(days = 365 * 30) :
-            single[i] = i.id
+        if i.fams == [] and (curr_date - i.birth) > datetime.timedelta(days = 365 * 30) :
+            single[i] = i.name
 
     return single
 
