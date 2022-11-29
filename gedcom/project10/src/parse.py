@@ -29,7 +29,6 @@ def is_valid_date(date):
 
     return False
 
-<<<<<<< HEAD
 # US42 All dates should be legitimate dates for the months specified (e.g., 2/30/2015 is not legitimate)
 def reject_invalid_date(date):
     re = '(\d{1,2}) ([A-Z]{3}) (\d{4})'
@@ -53,9 +52,6 @@ def reject_invalid_date(date):
     return False
 
     
-=======
-
->>>>>>> 611079b535ee95562bf1d9d7281c1ff284ca5abd
 # Input: [level, tag, args, ident] from GEDCOM file
 # Output: True if valid
 def is_valid_entry(level, ident, tag, args):
