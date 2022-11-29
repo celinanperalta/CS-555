@@ -28,6 +28,7 @@ def validate(gedcom):
     FAMILY_LIST_CHECKS = [
         check_US11,
         check_US17,
+        check_US18,
         check_US19,
         check_US20,
         check_US24,
@@ -49,9 +50,14 @@ def validate(gedcom):
         check_US02,
         check_US04,
         check_US05,
+
+        check_US14,
+        check_US15,
+
         check_US06,
         check_US08,
         check_US09,
+
         check_US10,
         check_US12,
         check_US13,
@@ -303,9 +309,7 @@ def check_US19(families):
             if x in marriages:
                 print(consts.MSG_US19.format(x[0], x[1]))
 
-
 # no more than 5 births
-
 
 def check_US14(family):
     sibling = family.children
@@ -325,25 +329,24 @@ def check_US14(family):
 
 
 # siblings cannot marry each other
+# it's going to catch the 2nd of the pair --> so if sib1 and sib2 are 
+# married its going to catch sib2
+# will catch all siblings (well half) married in the families
 
-
-def check_US18(family) -> None:
-    sibling = family.children
-    siblingMarriage = {}
-
-    for i in sibling:
-        if i.fams is not None:
-            if i.fams not in siblingMarriage:
-                siblingMarriage[i.fams] = 1
-                # print(i)
-                # print(siblingMarriage)
-            else:
-                siblingMarriage[i.fams] += 1
-                # print(i)
-                # print(siblingMarriage)
-            if siblingMarriage[i.fams] > 1:
-                print(consts.MSG_US18.format(str(i.id)))
-
+def check_US18(families):
+    for family in families: #every family in array of families
+        sibling = family.children #get the children of the family
+        siblingMarriage = {}
+        for i in sibling: #every sib
+            if((i.fams) is not []): #checks if they have a spouse
+                spouse = i.fams #array of that siblings spouses
+                for j in spouse: #every spouse (fam id) they had
+                    if(j not in siblingMarriage):
+                        siblingMarriage[j] = 1
+                    else:
+                        siblingMarriage[j] += 1   
+                if((siblingMarriage[j] > 1)): #if that fam id is found more than once ! they are married
+                    print(consts.MSG_US18.format(str(i.id)))
 
 def US11_get_marriage_dict(families):
     marriage_dict = defaultdict(lambda: [])
@@ -687,15 +690,13 @@ def check_US35(individuals):
 
 # List all the people that died in the last 30 days
 # @returns: List of all deceased individuals
-
-
-def check_US36(individuals):
-    deceased = []
+def check_US36(individuals): 
+    deceased = {}
 
     for i in individuals:
         if i.death is not None and (datetime.datetime.now() - i.death).days <= 30:
             print(consts.MSG_US36.format(i.name))
-            deceased.append(i.name)
+        deceased[i] = i.name
     return deceased
 
 

@@ -3,29 +3,38 @@ import datetime
 import sys
 import consts
 from model import Individual, Family
+from util import gedcom_date_to_datetime
 from validator import check_US18
 
-#should print out anomaly message , there are 6 siblings with the same birth
+#couldn't rename it but test for sibling being married
 def test_more_than_five_births(capfd):
-    mom = Individual("I01", datetime.datetime(1979, 10, 12) + datetime.timedelta(days=1))
-    dad = Individual("I02", datetime.datetime(1977, 1, 12) + datetime.timedelta(days=1))
+    i1 = Individual("I01", "A", "M", gedcom_date_to_datetime("1 JAN 2022"))
+    i2 = Individual("I02", "A", "M", gedcom_date_to_datetime("1 AUG 2022"))
+    i3 = Individual("I03", "A", "M", gedcom_date_to_datetime("2 AUG 2022"))
+    i4 = Individual("I04", "A", "M", gedcom_date_to_datetime("2 AUG 2022"))
+
+    i5 = Individual("I05", "A", "M", gedcom_date_to_datetime("1 JAN 2022"))
+    i6 = Individual("I06", "A", "M", gedcom_date_to_datetime("1 AUG 2022"))
+    i7 = Individual("I07", "A", "M", gedcom_date_to_datetime("2 AUG 2022"))
+    i8 = Individual("I08", "A", "M", gedcom_date_to_datetime("2 AUG 2022"))
+    i9 = Individual("I09", "A", "M", gedcom_date_to_datetime("2 AUG 2022"))
 
 
-    sib1 = Individual("I03", datetime.datetime(2000, 6, 9) + datetime.timedelta(days=1))
-    sib2 = Individual("I04", datetime.datetime(2005, 7, 11) + datetime.timedelta(days=1))
+    family = Family("F01", i1, i2, [], None, None)
+    family.set_children([i3, i4])
 
+    family2 = Family("F02", i3, i9, [], None, None)
+    i3.set_fams(family2.id)
+    i9.set_fams(family2.id)
 
-    obj = Family("F01", mom, dad, [], datetime.datetime(2001, 1, 2) + datetime.timedelta(days=1))
-    obj.set_children([sib1, sib2])
+    family3 = Family("F03", i5, i6, [], None, None)
+    family3.set_children([i7, i8])
 
-    obj2 = Family("F02", sib1, sib2, datetime.datetime(2022, 1, 2) + datetime.timedelta(days=1))
+    family4 = Family("F04", i7, i8, [], None, None)
+    i7.set_fams(family4.id)
+    i8.set_fams(family4.id)
 
-    sib1.set_fams([obj2])
-    sib2.set_fams([obj2])
-
-    #print(sib1.birth)
-    
-    check_US18(obj)
+    check_US18([family, family2, family3, family4])
     out, err = capfd.readouterr()
-    print(out.strip())
-    assert out.strip() == consts.MSG_US18.format((obj.children[1]))
+    #print(out.strip())
+    assert out.strip() == consts.MSG_US18.format(i8.id)

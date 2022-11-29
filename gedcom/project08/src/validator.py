@@ -485,7 +485,12 @@ def check_US31(individuals):
             single.append(i.id)
 
     return single
+<<<<<<< HEAD
+    
+ 
+=======
 
+>>>>>>> 49638562995d2690edbabd24a9ee1b781335c2fa
 
     
     
