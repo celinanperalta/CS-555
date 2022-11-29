@@ -654,7 +654,7 @@ def check_US35(individuals):
 
     for i in individuals:
         if i.birth is not None and (datetime.datetime.now() - i.birth).days <= 30:
-            print(consts.MSG_US35.format(i))
+            print(consts.MSG_US35.format(i.name))
             just_born.append(i.name)
     return just_born
 
@@ -668,7 +668,7 @@ def check_US36(individuals):
 
     for i in individuals:
         if i.death is not None and (datetime.datetime.now() - i.death).days <= 30:
-            print(consts.MSG_US36.format(i))
+            print(consts.MSG_US36.format(i.name))
             deceased.append(i.name)
     return deceased
 
