@@ -36,7 +36,7 @@ def validate(gedcom):
     ]
 
     # Checks that require entire list of individuals
-    INDIVIDUAL_LIST_CHECKS = [check_US23, check_US31, check_US38]
+    INDIVIDUAL_LIST_CHECKS = [check_US23, check_US29, check_US31, check_US32, check_US38]
 
     # Checks that need to be listed in output
     GEDCOM_CHECKS = [check_US22, check_US37, check_US30]
@@ -727,15 +727,35 @@ def check_US30(families, individuals):
 
 
 def check_US31(individuals):
-    single = []
+    single = {}
     curr_date = datetime.datetime.now()
 
     for i in individuals:
-        if i.fams is None and (curr_date - i.birth) > datetime.timedelta(days=365 * 30):
-            single.append(i)
+        if i.fams is None and (curr_date - i.birth) > datetime.timedelta(days = 365 * 30) :
+            single[i] = i.id
 
     return single
 
+def check_US29(individuals):
+    deceased = {}
+    for i in individuals:
+        if i.death is not None:
+            deceased[i] = {}
+
+    return deceased
+
+#list all multiple births
+def check_US32(individuals):
+    multipleBirths = {}
+    for i in individuals:
+        x = 0
+        for j in individuals:
+            if i.birth == j.birth:
+                x+=1
+            if x == 2:
+                if i not in multipleBirths:
+                    multipleBirths[i] = {}
+    return multipleBirths
 
 # All family roles (spouse, child) specified in an individual record should have corresponding entries in the corresponding family records.
 # Likewise, all individual roles (spouse, child) specified in family records should have corresponding entries in the corresponding individual's records.
