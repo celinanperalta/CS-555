@@ -1,16 +1,16 @@
 MONTHS = {
-    "JAN": 1, 
-    "FEB": 2, 
-    "MAR": 3, 
-    "APR": 4, 
-    "MAY": 5, 
-    "JUN": 6, 
-    "JUL": 7, 
-    "AUG": 8, 
-    "SEP": 9, 
-    "OCT": 10, 
-    "NOV": 11, 
-    "DEC": 12
+    "JAN": 1,
+    "FEB": 2,
+    "MAR": 3,
+    "APR": 4,
+    "MAY": 5,
+    "JUN": 6,
+    "JUL": 7,
+    "AUG": 8,
+    "SEP": 9,
+    "OCT": 10,
+    "NOV": 11,
+    "DEC": 12,
 }
 
 GEDCOM_TAG_INDI = "INDI"
@@ -48,7 +48,7 @@ TAGS = [
     GEDCOM_TAG_DATE,
     GEDCOM_TAG_HEAD,
     GEDCOM_TAG_TRLR,
-    GEDCOM_TAG_NOTE
+    GEDCOM_TAG_NOTE,
 ]
 
 # Errors and anomalies go here
@@ -81,3 +81,6 @@ MSG_US33 = "Anomaly US33: {0} is an orphan."
 MSG_US35 = "Anomaly US35: {0} was just born in the past 30 days."
 MSG_US36 = "Anomaly US36: {0} passed away in the past 30 days."
 MSG_US34 = "Anomaly US34: {0} is more than twice as old as spouse {1}."
+MSG_US26 = "Error US26: {0} has inconsistent records as a {1} for family {2}."
+
+

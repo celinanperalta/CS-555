@@ -1,8 +1,6 @@
 import pytest
 import datetime
 import sys
-sys.path.append("..")
-sys.path.append("../project06/src")
 import consts
 from model import Individual, Family
 from validator import check_US14

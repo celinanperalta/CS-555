@@ -1,8 +1,6 @@
 import pytest
 import datetime
 import sys
-sys.path.append("..")
-sys.path.append("../project06/src")
 import consts
 from model import Individual, Family
 from validator import check_US18
@@ -22,12 +20,12 @@ def test_more_than_five_births(capfd):
 
     obj2 = Family("F02", sib1, sib2, datetime.datetime(2022, 1, 2) + datetime.timedelta(days=1))
 
-    sib1.set_fams(obj2)
-    sib2.set_fams(obj2)
+    sib1.set_fams([obj2])
+    sib2.set_fams([obj2])
 
     #print(sib1.birth)
     
     check_US18(obj)
     out, err = capfd.readouterr()
     print(out.strip())
-    assert out.strip() == consts.MSG_US18.format((obj.children[1].id))
+    assert out.strip() == consts.MSG_US18.format((obj.children[1]))

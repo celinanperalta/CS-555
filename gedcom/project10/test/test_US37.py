@@ -25,6 +25,6 @@ def test_US37():
     individuals = [i0, i1, i2, i3, h, w]
     survivors = check_US37([family], individuals)
 
-    assert "I4" in survivors.keys()
-    assert len(survivors.get("I4")) == 4
+    assert h in survivors.keys()
+    assert len(survivors.get(h)) == 4
 

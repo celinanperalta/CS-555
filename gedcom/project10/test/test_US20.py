@@ -12,4 +12,4 @@ def test_US20(capfd):
     gedcom = GEDCOM(entries)
     check_US20(gedcom.families) 
     out, err = capfd.readouterr()
-    assert out.strip() == consts.MSG_US20.format("I9", "I1")
+    assert "I9" in out.strip() and "I1" in out.strip()
