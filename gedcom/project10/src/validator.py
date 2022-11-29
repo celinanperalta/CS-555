@@ -32,33 +32,45 @@ def validate(gedcom):
         check_US19,
         check_US20,
         check_US24,
+        check_US33,
         check_US34,
         check_US39,
     ]
 
     # Checks that require entire list of individuals
-    INDIVIDUAL_LIST_CHECKS = [check_US23, check_US29, check_US31, check_US32, check_US38]
+    INDIVIDUAL_LIST_CHECKS = [check_US23, check_US29,
+                              check_US31, check_US32, check_US35, check_US36, check_US38]
 
     # Checks that need to be listed in output
-    GEDCOM_CHECKS = [check_US22, check_US37, check_US30]
+    GEDCOM_CHECKS = [check_US22, check_US26, check_US30, check_US37]
 
     # Single Family object checks
     FAMILY_CHECKS = [
         check_US01,
+        check_US02,
         check_US04,
         check_US05,
+
         check_US14,
         check_US15,
+
+        check_US06,
+        check_US08,
+        check_US09,
+
         check_US10,
         check_US12,
-        check_US16,
         check_US13,
+        check_US14,
+        check_US15,
+        check_US16,
+        check_US18,
         check_US21,
         check_US25,
     ]
 
     # Single Individual object checks
-    INDIVIDUAL_CHECKS = [check_US01, check_US07]
+    INDIVIDUAL_CHECKS = [check_US01, check_US03, check_US07]
 
     # Tests to skip because they might be broken
     SKIP = [check_US18]
@@ -103,22 +115,16 @@ def check_US01(obj):
 # Error US02: Birth before marriage
 
 
-def check_US02(family, individual):
-    if individual.birth is not None and family.marriage_date is not None:
-        if individual.birth < family.marriage_date:
-            print(
-                consts.MSG_US02.format(
-                    str(individual), individual.birth, family.marriage_date
+def check_US02(family):
+    spouses = [family.husband, family.wife]
+    for individual in spouses:
+        if individual and individual.birth is not None and family.marriage_date is not None:
+            if individual.birth <= family.marriage_date:
+                print(
+                    consts.MSG_US02.format(
+                        str(individual), individual.birth, family.marriage_date
+                    )
                 )
-            )
-        if individual.birth == family.marriage_date:
-            print(
-                consts.MSG_US02.format(
-                    str(individual), individual.birth, family.marriage_date
-                )
-            )
-    if individual.birth is None or family.marriage_date is None:
-        print("Error: no input")
 
 
 # Error US03: Birth before death
@@ -179,6 +185,24 @@ def check_US05(family) -> None:
             )
         )
 
+# Error US05: Death before divorce
+
+
+def check_US06(family) -> None:
+    if family.husband is None or family.wife is None:
+        return
+    if (
+        family.wife.death is not None
+        and family.husband.death is not None
+        and family.divorce_date > family.wife.death
+        and family.divorce_date > family.husband.death
+    ):
+        print(
+            consts.MSG_US06.format(
+                str(family)
+            )
+        )
+
 
 # Anomaly US07: Less then 150 years old
 
@@ -206,50 +230,53 @@ def check_US07(individual) -> None:
 # birth before marriage/divource of parents
 
 
-def check_US08(family, individual):
-    if family.divorce_date is not None and family.marriage_date is not None:
-        if individual.birth < family.marriage_date:
-            print(
-                consts.MSG_US08.format(
-                    str(individual), individual.birth, family.marriage_date
-                )
-            )
+def check_US08(family):
+    if family.marriage_date is not None:
+        for individual in family.children:
+            if family.divorce_date is not None:
+                if individual.birth < family.marriage_date:
+                    print(
+                        consts.MSG_US08.format(
+                            str(individual), individual.birth, family.marriage_date
+                        )
+                    )
 
-        # average days in a month is 30.4
-        if (((individual.birth - (family.divorce_date)).days)) / 30.4 > 9:
-            print(
-                consts.MSG_US08.format(
-                    str(individual), individual.birth, family.divorce_date
-                )
-            )
+                # average days in a month is 30.4
+                if (((individual.birth - (family.divorce_date)).days)) / 30.4 > 9:
+                    print(
+                        consts.MSG_US08.format(
+                            str(individual), individual.birth, family.divorce_date
+                        )
+                    )
 
-    if family.marriage_date is not None and family.divorce_date is None:
-        if individual.birth < family.marriage_date:
-            print(
-                consts.MSG_US08.format(
-                    str(individual), individual.birth, family.marriage_date
-                )
-            )
+            else:
+                if individual.birth < family.marriage_date:
+                    print(
+                        consts.MSG_US08.format(
+                            str(individual), individual.birth, family.marriage_date
+                        )
+                    )
 
 
 # birth before death of parents
 
 
-def check_US09(family, individual):
-    if family.wife.death is not None:
-        if individual.birth < family.wife.death:
-            print(
-                consts.MSG_US09.format(
-                    str(individual), individual.birth, family.wife.death
+def check_US09(family):
+    for individual in family.children:
+        if family.wife and family.wife.death is not None:
+            if individual.birth < family.wife.death:
+                print(
+                    consts.MSG_US09.format(
+                        str(individual), individual.birth, family.wife.death
+                    )
                 )
-            )
-    elif family.husband.death is not None:
-        if (((individual.birth - (family.husband.death)).days)) / 30.4 > 9:
-            print(
-                consts.MSG_US09.format(
-                    str(individual), individual.birth, family.husband.death
+        elif family.husband and family.husband.death is not None:
+            if (((individual.birth - (family.husband.death)).days)) / 30.4 > 9:
+                print(
+                    consts.MSG_US09.format(
+                        str(individual), individual.birth, family.husband.death
+                    )
                 )
-            )
 
 
 # First cousins should not marry one another
@@ -348,7 +375,8 @@ def check_US11(families):
 
     for k, v in marriage_dict.items():
         dates = sorted(v, key=lambda x: x[0])
-        valid = reduce(lambda x, y: is_date_overlap(x[0], x[1], y[0], y[1]), dates)
+        valid = reduce(lambda x, y: is_date_overlap(
+            x[0], x[1], y[0], y[1]), dates)
 
         if not valid:
             print(consts.MSG_US11.format(k))
@@ -386,7 +414,8 @@ def check_US17(families: List[Family]):
     for family in families:
         if family.husband is None or family.wife is None:
             continue
-        husband_descendants = list(map(lambda x: x, descendants[family.husband]))
+        husband_descendants = list(
+            map(lambda x: x, descendants[family.husband]))
         wife_descendants = list(map(lambda x: x, descendants[family.wife]))
         if family.husband in wife_descendants or family.wife in husband_descendants:
             print(consts.MSG_US17.format(family.husband, family.wife))
@@ -485,7 +514,7 @@ def check_US16(family) -> None:
             if last_name != member.name.split(" ", 1)[1]:
                 print(
                     consts.MSG_US16.format(
-                        (member.name + " (" + member.id + ")"), last_name
+                        member, last_name
                     )
                 )
 
@@ -529,7 +558,8 @@ def check_US21(family) -> None:
     if family.wife is not None and family.wife.sex != "F":
         print(consts.MSG_US21.format(family.wife, "wife", family.wife.sex))
     if family.husband is not None and family.husband.sex != "M":
-        print(consts.MSG_US21.format(family.husband, "husband", family.husband.sex))
+        print(consts.MSG_US21.format(
+            family.husband, "husband", family.husband.sex))
 
 
 # All individual IDs should be unique and all family IDs should be unique
@@ -572,7 +602,8 @@ def check_US24(families) -> None:
         if f.husband is None or f.wife is None:
             continue
         if {f.wife.name, f.husband.name, f.marriage_date} in info:
-            print(consts.MSG_US24.format(f.wife.name, f.husband.name, f.marriage_date))
+            print(consts.MSG_US24.format(
+                f.wife.name, f.husband.name, f.marriage_date))
         else:
             info.append({f.wife.name, f.husband.name, f.marriage_date})
 
@@ -595,21 +626,21 @@ def check_US25(family: Family):
 # return: List of orphans
 
 
-def check_US33(families, individuals):
-    all_relatives = get_descendants_map(families)
+def check_US33(families):
+    orphans = []
 
     for family in families:
-        if family.marriage_date is not None:
-            all_relatives[family.husband.id].add(family.wife)
-            all_relatives[family.wife.id].add(family.husband)
+        if family.wife.death and family.husband.death:
+            for i in family.children:
+                if i.birth is not None and (datetime.datetime.now() - i.birth).days < 6570:
+                    orphans.append(i)
 
-    orphans = {}
+    table = [["Orphans"]]
 
-    for i in individuals:
-        if i.birth is not None and (datetime.datetime.now() - i.birth).days < 6570:
-            orphans[i.id] = list(
-                filter(lambda x: x.death is not None, all_relatives[i.id])
-            )
+    for k in orphans:
+        table.append([str(k)])
+
+    print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
 
     return orphans
 
@@ -635,7 +666,7 @@ def check_US34(families: List[Family]):
     table = [["Couples with Large Age Difference"]]
 
     for couple in couples:
-        table.append(couple)
+        table.append([couple])
 
     print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
 
@@ -653,6 +684,7 @@ def check_US35(individuals):
         if i.birth is not None and (datetime.datetime.now() - i.birth).days <= 30:
             print(consts.MSG_US35.format(i.name))
             just_born.append(i.name)
+
     return just_born
 
 
@@ -684,7 +716,8 @@ def check_US37(families, individuals):
 
     for i in individuals:
         if i.death is not None and (datetime.datetime.now() - i.death).days <= 30:
-            survivors[i] = list(filter(lambda x: x.death is None, all_relatives[i]))
+            survivors[i] = list(
+                filter(lambda x: x.death is None, all_relatives[i]))
 
     table = [["Deceased", "Survivors"]]
 
@@ -726,10 +759,11 @@ def check_US31(individuals):
     curr_date = datetime.datetime.now()
 
     for i in individuals:
-        if len(i.fams) == 0 and (curr_date - i.birth) > datetime.timedelta(days = 365 * 30) :
+        if len(i.fams) == 0 and (curr_date - i.birth) > datetime.timedelta(days=365 * 30):
             single[i.id] = i
 
     return single
+
 
 def check_US29(individuals):
     deceased = {}
@@ -739,14 +773,16 @@ def check_US29(individuals):
 
     return deceased
 
-#list all multiple births
+# list all multiple births
+
+
 def check_US32(individuals):
     multipleBirths = {}
     for i in individuals:
         x = 0
         for j in individuals:
             if i.birth == j.birth:
-                x+=1
+                x += 1
             if x == 2:
                 if i not in multipleBirths:
                     multipleBirths[i] = {}
@@ -769,9 +805,9 @@ def check_US26(families, individuals):
 
     for f in families:
         if f.husband:
-            families_set.add(f.husband, "S", f.id)
+            families_set.add((f.husband, "S", f.id))
         if f.wife:
-            families_set.add(f.wife, "S", f.id)
+            families_set.add((f.wife, "S", f.id))
         for x in f.children:
             families_set.add((x, "C", f.id))
 
@@ -800,7 +836,8 @@ def check_US38(individuals):
             if time_until_birthday > 364:
                 time_until_birthday = time_until_birthday - 364
             if time_until_birthday <= 30 and time_until_birthday >= 0:
-                table.append([individual.name, individual.birth.strftime("%m-%d")])
+                table.append(
+                    [individual.name, individual.birth.strftime("%m-%d")])
     print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
     return table
 
@@ -834,7 +871,9 @@ def check_US39(families):
     print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
     return table
 
-#List siblings in families by decreasing age, i.e. oldest siblings first
+# List siblings in families by decreasing age, i.e. oldest siblings first
+
+
 def check_US28(family: Family):
     children: List[Individual] = family.children
     info_list = set()
@@ -844,6 +883,3 @@ def check_US28(family: Family):
 
     sorted_children = sorted(info_list, reverse=True)
     return sorted_children
-
-
-

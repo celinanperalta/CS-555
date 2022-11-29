@@ -10,7 +10,7 @@ import pprint
 def test_US33():
 
     i0 = Individual("I0", "Bob", "M", gedcom_date_to_datetime("1 JAN 2002"))
-    i1 = Individual("I1", "Jim", "M", gedcom_date_to_datetime("1 JAN 2006"))
+    i1 = Individual("I1", "Jim", "M", birth=datetime.datetime.now() - datetime.timedelta(weeks=104))
     i2 = Individual("I2", "Sue", "M", gedcom_date_to_datetime("1 JAN 1999"))
     i3 = Individual("I3", "Karen", "M", gedcom_date_to_datetime("3 JAN 2000"))
     
@@ -23,7 +23,7 @@ def test_US33():
     family.set_children(children)
 
     individuals = [i0, i1, i2, i3, h, w]
-    orphans = check_US33([family], individuals)
+    orphans = check_US33([family])
 
-    assert "I1" in orphans.keys()
-    assert len(orphans.get("I1")) == 0
+    assert i1 in orphans
+    assert len(orphans) == 1
