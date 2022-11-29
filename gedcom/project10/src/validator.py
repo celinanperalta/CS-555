@@ -448,12 +448,12 @@ def check_US29(individuals):
 #list all multiple births
 def check_US32(individuals):
     multipleBirths = {}
-    for i in sorted(individuals):
-        births = 0
-        for j in sorted(individuals):
+    for i in individuals:
+        x = 0
+        for j in individuals:
             if i.birth == j.birth:
-                births+=1
-            if i == 2:
+                x+=1
+            if x == 2:
                 if i not in multipleBirths:
                     multipleBirths[i] = {}
     return multipleBirths
