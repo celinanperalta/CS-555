@@ -90,7 +90,7 @@ test/test_US41.py::test_gedcom_date_2 PASSED                             [100%]
 =================================== FAILURES ===================================
 __________________________ test_more_than_five_births __________________________
 
-capfd = <_pytest.capture.CaptureFixture object at 0x128e6fe50>
+capfd = <_pytest.capture.CaptureFixture object at 0x12b84aad0>
 
     def test_more_than_five_births(capfd):
         mom = Individual("I01", datetime.datetime(1979, 10, 12) + datetime.timedelta(days=1))
@@ -116,21 +116,21 @@ capfd = <_pytest.capture.CaptureFixture object at 0x128e6fe50>
 test/test_US18.py:28: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-family = <model.Family object at 0x128eb0220>
+family = <model.Family object at 0x12b88c130>
 
     def check_US18(family) -> None:
         sibling = family.children
         siblingMarriage = {}
     
         for i in sibling:
-            if(i.fams is not None):
->               if(i.fams not in siblingMarriage):
+            if i.fams is not None:
+>               if i.fams not in siblingMarriage:
 E               TypeError: unhashable type: 'list'
 
-src/validator.py:234: TypeError
+src/validator.py:315: TypeError
 __________________________________ test_US27 ___________________________________
 
-capfd = <_pytest.capture.CaptureFixture object at 0x128eb2b30>
+capfd = <_pytest.capture.CaptureFixture object at 0x12b88c730>
 
     def test_US27(capfd):
     
@@ -162,7 +162,7 @@ E       AssertionError: assert 'I4' in []
 test/test_US31.py:26: AssertionError
 __________________________________ test_US35 ___________________________________
 
-capfd = <_pytest.capture.CaptureFixture object at 0x128efec20>
+capfd = <_pytest.capture.CaptureFixture object at 0x12b88e0e0>
 
     def test_US35(capfd):
         person1 = Individual("I01", "Kristen Smiles", "F", birth=gedcom_date_to_datetime("12 OCT 2022"))
@@ -173,13 +173,13 @@ capfd = <_pytest.capture.CaptureFixture object at 0x128efec20>
     
         out, err = capfd.readouterr()
 >       assert out.strip() == consts.MSG_US35.format(person1.name)
-E       AssertionError: assert '' == 'Anomaly US35...past 30 days.'
+E       AssertionError: assert '' == 'Anomaly US35: Kristen Smiles was just born in the past 30 days.'
 E         - Anomaly US35: Kristen Smiles was just born in the past 30 days.
 
 test/test_US35.py:18: AssertionError
 __________________________________ test_US36 ___________________________________
 
-capfd = <_pytest.capture.CaptureFixture object at 0x128effe50>
+capfd = <_pytest.capture.CaptureFixture object at 0x12b93a620>
 
     def test_US36(capfd):
         person1 = Individual("I01","Kristen Smiles", "F", death=gedcom_date_to_datetime("12 OCT 2022"))
@@ -191,14 +191,32 @@ capfd = <_pytest.capture.CaptureFixture object at 0x128effe50>
     
         out, err = capfd.readouterr()
 >       assert out.strip() == consts.MSG_US36.format(person1.name)
-E       AssertionError: assert '' == 'Anomaly US36...past 30 days.'
+E       AssertionError: assert '' == 'Anomaly US36: Kristen Smiles passed away in the past 30 days.'
 E         - Anomaly US36: Kristen Smiles passed away in the past 30 days.
 
 test/test_US36.py:18: AssertionError
+=============================== warnings summary ===============================
+src/parse.py:15
+  /Users/celinaperalta/Documents/School/CS-555/CS-555/gedcom/project10/../project10/src/parse.py:15: DeprecationWarning: invalid escape sequence '\d'
+    re = "(\d{1,2}) ([A-Z]{3}) (\d{4})"
+
+src/parse.py:20
+  /Users/celinaperalta/Documents/School/CS-555/CS-555/gedcom/project10/../project10/src/parse.py:20: DeprecationWarning: invalid escape sequence '\d'
+    re = "([A-Z]{3}) (\d{4})"
+
+src/parse.py:25
+  /Users/celinaperalta/Documents/School/CS-555/CS-555/gedcom/project10/../project10/src/parse.py:25: DeprecationWarning: invalid escape sequence '\d'
+    re = "(\d{4})"
+
+src/parse.py:50
+  /Users/celinaperalta/Documents/School/CS-555/CS-555/gedcom/project10/../project10/src/parse.py:50: DeprecationWarning: invalid escape sequence '\d'
+    level_re = "^(0|[1-9]+\d*) "
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 =========================== short test summary info ============================
 FAILED test/test_US18.py::test_more_than_five_births - TypeError: unhashable ...
 FAILED test/test_US27.py::test_US27 - TypeError: 'years' is an invalid keywor...
 FAILED test/test_US31.py::test_US31 - AssertionError: assert 'I4' in []
 FAILED test/test_US35.py::test_US35 - AssertionError: assert '' == 'Anomaly U...
 FAILED test/test_US36.py::test_US36 - AssertionError: assert '' == 'Anomaly U...
-========================= 5 failed, 80 passed in 0.71s =========================
+=================== 5 failed, 80 passed, 4 warnings in 0.77s ===================
