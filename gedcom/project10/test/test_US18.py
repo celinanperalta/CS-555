@@ -5,27 +5,20 @@ import consts
 from model import Individual, Family
 from validator import check_US18
 
-#should print out anomaly message , there are 6 siblings with the same birth
-def test_more_than_five_births(capfd):
-    mom = Individual("I01", datetime.datetime(1979, 10, 12) + datetime.timedelta(days=1))
-    dad = Individual("I02", datetime.datetime(1977, 1, 12) + datetime.timedelta(days=1))
+def sibs_should_not_marry(capfd):
+    i1 = Individual("I01", "A", "M", gedcom_date_to_datetime("1 JAN 2022"))
+    i2 = Individual("I02", "A", "M", gedcom_date_to_datetime("1 AUG 2022"))
+    i3 = Individual("I03", "A", "M", gedcom_date_to_datetime("2 AUG 2022"))
+    i4 = Individual("I04", "A", "M", gedcom_date_to_datetime("2 AUG 2022"))
 
 
-    sib1 = Individual("I03", datetime.datetime(2000, 6, 9) + datetime.timedelta(days=1))
-    sib2 = Individual("I04", datetime.datetime(2005, 7, 11) + datetime.timedelta(days=1))
+    family = Family("F01", i1, i2, [], None, None)
+    family.set_children([i3, i4])
 
+    family2 = Family("F02", i3, i4, [], None, None)
+    i3.set_fams(family2.id)
+    i4.set_fams(family2.id)
 
-    obj = Family("F01", mom, dad, [], datetime.datetime(2001, 1, 2) + datetime.timedelta(days=1))
-    obj.set_children([sib1, sib2])
-
-    obj2 = Family("F02", sib1, sib2, datetime.datetime(2022, 1, 2) + datetime.timedelta(days=1))
-
-    sib1.set_fams([obj2])
-    sib2.set_fams([obj2])
-
-    #print(sib1.birth)
-    
-    check_US18(obj)
+    check_US18(family)
     out, err = capfd.readouterr()
-    print(out.strip())
-    assert out.strip() == consts.MSG_US18.format((obj.children[1]))
+    assert out.strip() == consts.MSG_US18.format(i3)

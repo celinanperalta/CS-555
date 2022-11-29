@@ -282,9 +282,7 @@ def check_US19(families):
             if x in marriages:
                 print(consts.MSG_US19.format(x[0], x[1]))
 
-
 # no more than 5 births
-
 
 def check_US14(family):
     sibling = family.children
@@ -305,23 +303,23 @@ def check_US14(family):
 
 # siblings cannot marry each other
 
-
-def check_US18(family) -> None:
+def check_US18(family):
     sibling = family.children
     siblingMarriage = {}
 
-    for i in sibling:
-        if(len(i.fams) > 0):
-            if(i not in siblingMarriage):
-                siblingMarriage[i] = 1 
-                #print(i)
+    for i in sibling: #every sib
+        if((i.fams) is not []): #checks if they have a spouse
+            spouse = i.fams #array of their spouses
+            for j in spouse: #every spouse they had
                 #print(siblingMarriage)
-            else:
-                siblingMarriage[i] += 1
-                #print(i)
-                #print(siblingMarriage)
-            if(siblingMarriage[i] > 1):
+                if(j not in siblingMarriage):
+                    siblingMarriage[j] = 1
+                else:
+                    siblingMarriage[j] += 1   
+            if((siblingMarriage[j] > 1)):
                 print(consts.MSG_US18.format(str(i.id)))
+
+
 
 
 def US11_get_marriage_dict(families):
