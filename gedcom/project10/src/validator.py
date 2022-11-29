@@ -428,14 +428,35 @@ def check_US30(families, individuals):
 
 #list all the single
 def check_US31(individuals):
-    single = []
+    single = {}
     curr_date = datetime.datetime.now()
 
     for i in individuals:
         if i.fams is None and (curr_date - i.birth) > datetime.timedelta(days = 365 * 30) :
-            single.append(i.id)
+            single[i] = i.id
 
     return single
+
+def check_US29(individuals):
+    deceased = {}
+    for i in individuals:
+        if i.death is not None:
+            death[i] = {}
+
+    return deceased
+
+#list all multiple births
+def check_US32(individuals):
+    multipleBirths = {}
+    for i in sorted(individuals):
+        births = 0
+        for j in sorted(individuals):
+            if i.birth == j.birth:
+                births+=1
+            if i == 2:
+                if i not in multipleBirths:
+                    multipleBirths[i] = {}
+    return multipleBirths
 
 #
 #   List and run validations here
@@ -445,7 +466,7 @@ def check_US31(individuals):
 FAMILY_LIST_CHECKS = [check_US11, check_US17, check_US19, check_US20, check_US24]
 
 # Checks that require entire list of individuals
-INDIVIDUAL_LIST_CHECKS = [check_US23, check_US31]
+INDIVIDUAL_LIST_CHECKS = [check_US23, check_US31, check_US29, check_US32]
 
 # Checks that need to be listed in output
 GEDCOM_CHECKS = [check_US22, check_US37, check_US30]
