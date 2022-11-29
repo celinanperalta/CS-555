@@ -89,6 +89,7 @@ class Family:
         self.children.clear()
         for x in children:
             self.children.append(x)
+            self.children.sort(key=lambda x: x.birth if x.birth else 0) # US28
 
     def set_marriage_date(self, marriage_date):
         self.marriage_date = gedcom_date_to_datetime(marriage_date)
@@ -98,6 +99,7 @@ class Family:
 
     def add_child(self, child):
         self.children.append(child)
+        self.children.sort(key=lambda x: x.birth if x.birth else 0)
 
     # For pretty printing families
     def to_table_row(self):
