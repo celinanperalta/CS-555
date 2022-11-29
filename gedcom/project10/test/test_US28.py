@@ -8,12 +8,16 @@ from util import gedcom_date_to_datetime
 import pprint
 
 def test_US28(capfd):
-    person1 = Individual("I01", "Kristen Smiles", "F", birth=gedcom_date_to_datetime("12 OCT 2022"))
-    person2 = Individual("I02", "Chris Smiles", "F", birth=gedcom_date_to_datetime("1 JAN 2001"))
+    children = []
 
-    individuals = [person1, person2]
-    check_US28(individuals)
+    children.append(Individual("I0", "Serena", "F", gedcom_date_to_datetime("6 MAR 2001")))
+    children.append(Individual("I1", "Sophia", "F", gedcom_date_to_datetime("20 APR 2005")))
+
+    family = Family("F01", None, None, [], None, None)
+    family.set_children(children)
+    check_US28(family)
+
 
     out, err = capfd.readouterr()
-    assert out.strip() == consts.MSG_US28.format(person1.name)
+    assert check_US28(family)
 

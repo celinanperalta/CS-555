@@ -825,7 +825,7 @@ def check_US28(family: Family):
     info_list = set()
 
     for c in children:
-        info_list.append(c.name, c.birth)
+        info_list.add((c.name, c.birth))
 
     sorted_children = sorted(info_list, reverse=True)
     return sorted_children
