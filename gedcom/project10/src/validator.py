@@ -4,14 +4,19 @@ from collections import defaultdict, deque
 from functools import reduce
 from itertools import combinations, permutations, product
 from typing import List
-from tabulate import tabulate
 
 from dateutil import relativedelta
+from tabulate import tabulate
 
 import consts
-
 from model import Family, Individual
-from util import get_descendants_map, is_date_overlap, get_relativedelta, get_age_in_years, get_marriage_length_in_years
+from util import (
+    get_age_in_years,
+    get_descendants_map,
+    get_marriage_length_in_years,
+    get_relativedelta,
+    is_date_overlap,
+)
 
 
 def validate(gedcom):
@@ -20,21 +25,40 @@ def validate(gedcom):
     #
 
     # Checks that require entire list of families
-    FAMILY_LIST_CHECKS = [check_US11,  check_US17,
-                          check_US19,  check_US20,  check_US24, check_US34, check_US39]
+    FAMILY_LIST_CHECKS = [
+        check_US11,
+        check_US17,
+        check_US19,
+        check_US20,
+        check_US24,
+        check_US34,
+        check_US39,
+    ]
 
     # Checks that require entire list of individuals
-    INDIVIDUAL_LIST_CHECKS = [check_US23,  check_US31, check_US38]
+    INDIVIDUAL_LIST_CHECKS = [check_US23, check_US31, check_US38]
 
     # Checks that need to be listed in output
-    GEDCOM_CHECKS = [check_US22,  check_US37,  check_US30]
+    GEDCOM_CHECKS = [check_US22, check_US37, check_US30]
 
     # Single Family object checks
-    FAMILY_CHECKS = [check_US01,  check_US04,  check_US05,  check_US14,  check_US18,  check_US15,
-                     check_US10,  check_US12,  check_US16,  check_US13,  check_US21,  check_US25]
+    FAMILY_CHECKS = [
+        check_US01,
+        check_US04,
+        check_US05,
+        check_US14,
+        check_US18,
+        check_US15,
+        check_US10,
+        check_US12,
+        check_US16,
+        check_US13,
+        check_US21,
+        check_US25,
+    ]
 
     # Single Individual object checks
-    INDIVIDUAL_CHECKS = [check_US01,  check_US07]
+    INDIVIDUAL_CHECKS = [check_US01, check_US07]
 
     # Tests to skip because they might be broken
     SKIP = [check_US18]
@@ -75,36 +99,58 @@ def check_US01(obj):
         if obj.divorce_date is not None and obj.divorce_date > curr_date:
             print(consts.MSG_US01.format("Divorce", obj.divorce_date))
 
+
 # Error US02: Birth before marriage
 
 
 def check_US02(family, individual):
-    if (individual.birth is not None and family.marriage_date is not None):
-        if(individual.birth < family.marriage_date):
-            print(consts.MSG_US02.format(str(individual),
-                                         individual.birth, family.marriage_date))
-        if (individual.birth == family.marriage_date):
-            print(consts.MSG_US02.format(str(individual),
-                                         individual.birth, family.marriage_date))
-    if (individual.birth is None or family.marriage_date is None):
+    if individual.birth is not None and family.marriage_date is not None:
+        if individual.birth < family.marriage_date:
+            print(
+                consts.MSG_US02.format(
+                    str(individual), individual.birth, family.marriage_date
+                )
+            )
+        if individual.birth == family.marriage_date:
+            print(
+                consts.MSG_US02.format(
+                    str(individual), individual.birth, family.marriage_date
+                )
+            )
+    if individual.birth is None or family.marriage_date is None:
         print("Error: no input")
+
 
 # Error US03: Birth before death
 
 
 def check_US03(individual) -> None:
-    if individual.birth is not None and individual.death is not None and individual.birth < individual.death:
+    if (
+        individual.birth is not None
+        and individual.death is not None
+        and individual.birth < individual.death
+    ):
         print(consts.MSG_US03.format(str(individual.birth), individual.death))
     if individual.birth == individual.death:
         print(consts.MSG_US03.format(str(individual.birth), individual.death))
+
 
 # Error US04: Marriage before divorce
 
 
 def check_US04(family) -> None:
-    if family.divorce_date is not None and (family.marriage_date is None or family.marriage_date > family.divorce_date):
-        print(consts.MSG_US04.format(str(family.wife), str(
-            family.husband), family.marriage_date, family.divorce_date))
+    if family.divorce_date is not None and (
+        family.marriage_date is None or family.marriage_date > family.divorce_date
+    ):
+        print(
+            consts.MSG_US04.format(
+                str(family.wife),
+                str(family.husband),
+                family.marriage_date,
+                family.divorce_date,
+            )
+        )
+
 
 # Error US05: Marriage before death
 
@@ -112,12 +158,27 @@ def check_US04(family) -> None:
 def check_US05(family) -> None:
     if family.husband is None or family.wife is None:
         return
-    if family.wife.death is not None and family.marriage_date is not None and family.wife.death < family.marriage_date:
-        print(consts.MSG_US05.format(str(family.wife),
-                                     family.marriage_date, family.wife.death))
-    if family.husband.death is not None and family.marriage_date is not None and family.husband.death < family.marriage_date:
-        print(consts.MSG_US05.format(str(family.husband),
-                                     family.marriage_date, family.husband.death))
+    if (
+        family.wife.death is not None
+        and family.marriage_date is not None
+        and family.wife.death < family.marriage_date
+    ):
+        print(
+            consts.MSG_US05.format(
+                str(family.wife), family.marriage_date, family.wife.death
+            )
+        )
+    if (
+        family.husband.death is not None
+        and family.marriage_date is not None
+        and family.husband.death < family.marriage_date
+    ):
+        print(
+            consts.MSG_US05.format(
+                str(family.husband), family.marriage_date, family.husband.death
+            )
+        )
+
 
 # Anomaly US07: Less then 150 years old
 
@@ -141,37 +202,55 @@ def check_US07(individual) -> None:
     if not valid:
         print(consts.MSG_US07.format(str(individual)))
 
+
 # birth before marriage/divource of parents
 
 
 def check_US08(family, individual):
-    if(family.divorce_date is not None and family.marriage_date is not None):
-        if(individual.birth < family.marriage_date):
-            print(consts.MSG_US08.format(str(individual),
-                                         individual.birth, family.marriage_date))
+    if family.divorce_date is not None and family.marriage_date is not None:
+        if individual.birth < family.marriage_date:
+            print(
+                consts.MSG_US08.format(
+                    str(individual), individual.birth, family.marriage_date
+                )
+            )
 
         # average days in a month is 30.4
-        if((((individual.birth - (family.divorce_date)).days))/30.4 > 9):
-            print(consts.MSG_US08.format(str(individual),
-                                         individual.birth, family.divorce_date))
+        if (((individual.birth - (family.divorce_date)).days)) / 30.4 > 9:
+            print(
+                consts.MSG_US08.format(
+                    str(individual), individual.birth, family.divorce_date
+                )
+            )
 
-    if(family.marriage_date is not None and family.divorce_date is None):
-        if(individual.birth < family.marriage_date):
-            print(consts.MSG_US08.format(str(individual),
-                                         individual.birth, family.marriage_date))
+    if family.marriage_date is not None and family.divorce_date is None:
+        if individual.birth < family.marriage_date:
+            print(
+                consts.MSG_US08.format(
+                    str(individual), individual.birth, family.marriage_date
+                )
+            )
+
 
 # birth before death of parents
 
 
 def check_US09(family, individual):
-    if(family.wife.death is not None):
-        if(individual.birth < family.wife.death):
-            print(consts.MSG_US09.format(str(individual),
-                                         individual.birth, family.wife.death))
-    elif(family.husband.death is not None):
-        if((((individual.birth - (family.husband.death)).days))/30.4 > 9):
-            print(consts.MSG_US09.format(str(individual),
-                                         individual.birth, family.husband.death))
+    if family.wife.death is not None:
+        if individual.birth < family.wife.death:
+            print(
+                consts.MSG_US09.format(
+                    str(individual), individual.birth, family.wife.death
+                )
+            )
+    elif family.husband.death is not None:
+        if (((individual.birth - (family.husband.death)).days)) / 30.4 > 9:
+            print(
+                consts.MSG_US09.format(
+                    str(individual), individual.birth, family.husband.death
+                )
+            )
+
 
 # First cousins should not marry one another
 
@@ -182,7 +261,7 @@ def check_US19(families):
     marriages = []
     children_map = defaultdict(lambda: [])
     for family in families:
-        if (family.marriage_date is not None):
+        if family.marriage_date is not None:
             marriages += [(family.husband.id, family.wife.id)]
         if family.husband:
             children_map[family.husband.id] += family.children
@@ -200,8 +279,9 @@ def check_US19(families):
             all_pairs += [(x[0].id, x[1].id)]
             all_pairs += [(x[1].id, x[0].id)]
         for x in all_pairs:
-            if (x in marriages):
+            if x in marriages:
                 print(consts.MSG_US19.format(x[0], x[1]))
+
 
 # no more than 5 births
 
@@ -211,7 +291,7 @@ def check_US14(family):
     siblingBirthday = {}
 
     for i in sibling:
-        if(i.birth not in siblingBirthday):
+        if i.birth not in siblingBirthday:
             siblingBirthday[i.birth] = 1
             # print(family.id)
             # print(siblingBirthday)
@@ -219,8 +299,9 @@ def check_US14(family):
             siblingBirthday[i.birth] += 1
             # print(family.id)
             # print(siblingBirthday)
-        if(siblingBirthday[i.birth] > 5):
+        if siblingBirthday[i.birth] > 5:
             print(consts.MSG_US14.format(str(family.id)))
+
 
 # siblings cannot marry each other
 
@@ -230,8 +311,8 @@ def check_US18(family) -> None:
     siblingMarriage = {}
 
     for i in sibling:
-        if(i.fams is not None):
-            if(i.fams not in siblingMarriage):
+        if i.fams is not None:
+            if i.fams not in siblingMarriage:
                 siblingMarriage[i.fams] = 1
                 # print(i)
                 # print(siblingMarriage)
@@ -239,7 +320,7 @@ def check_US18(family) -> None:
                 siblingMarriage[i.fams] += 1
                 # print(i)
                 # print(siblingMarriage)
-            if(siblingMarriage[i.fams] > 1):
+            if siblingMarriage[i.fams] > 1:
                 print(consts.MSG_US18.format(str(i.id)))
 
 
@@ -249,11 +330,18 @@ def US11_get_marriage_dict(families):
     for family in families:
         if family.marriage_date is not None:
             marriage_details = [
-                [family.marriage_date, family.divorce_date if family.divorce_date is not None else datetime.datetime(4000, 1, 1, 1, 1)]]
+                [
+                    family.marriage_date,
+                    family.divorce_date
+                    if family.divorce_date is not None
+                    else datetime.datetime(4000, 1, 1, 1, 1),
+                ]
+            ]
             marriage_dict[family.husband] += marriage_details
             marriage_dict[family.wife] += marriage_details
 
     return marriage_dict
+
 
 # Marriage should not occur during marriage to another spouse
 
@@ -263,11 +351,11 @@ def check_US11(families):
 
     for k, v in marriage_dict.items():
         dates = sorted(v, key=lambda x: x[0])
-        valid = reduce(lambda x, y: is_date_overlap(
-            x[0], x[1], y[0], y[1]), dates)
+        valid = reduce(lambda x, y: is_date_overlap(x[0], x[1], y[0], y[1]), dates)
 
         if not valid:
             print(consts.MSG_US11.format(k))
+
 
 # Birth dates of siblings should be more than 8 months apart or less than
 # 2 days apart (twins may be born one day apart, e.g. 11:59 PM and 12:02 AM the following calendar day)
@@ -276,11 +364,13 @@ def check_US11(families):
 def check_US13(family):
     sibling_pairs = list(combinations(family.children, 2))
     for pair in sibling_pairs:
-        if (pair[0].birth is not None and pair[1].birth is not None):
+        if pair[0].birth is not None and pair[1].birth is not None:
             days_between, months_between = get_relativedelta(
-                pair[0].birth, pair[1].birth)
+                pair[0].birth, pair[1].birth
+            )
             if not (days_between < 2 or months_between >= 8):
                 print(consts.MSG_US13.format(pair[0], pair[1]))
+
 
 # There should be fewer than 15 siblings in a family
 
@@ -288,6 +378,7 @@ def check_US13(family):
 def check_US15(family):
     if len(family.children) >= 15:
         print(consts.MSG_US15.format(family.id))
+
 
 # Parents should not marry any of their descendants
 
@@ -298,12 +389,11 @@ def check_US17(families: List[Family]):
     for family in families:
         if family.husband is None or family.wife is None:
             continue
-        husband_descendants = list(
-            map(lambda x: x, descendants[family.husband]))
-        wife_descendants = list(
-            map(lambda x: x, descendants[family.wife]))
+        husband_descendants = list(map(lambda x: x, descendants[family.husband]))
+        wife_descendants = list(map(lambda x: x, descendants[family.wife]))
         if family.husband in wife_descendants or family.wife in husband_descendants:
             print(consts.MSG_US17.format(family.husband, family.wife))
+
 
 # marriage after 14 for both spouses
 
@@ -311,12 +401,29 @@ def check_US17(families: List[Family]):
 def check_US10(family) -> None:
     if family.husband is None or family.wife is None:
         return
-    if family.wife.birth is not None and family.marriage_date is not None and family.wife.birth.year + 14 > family.marriage_date.year:
-        print(consts.MSG_US10.format(str(family.wife),
-                                     family.marriage_date.year, family.wife.birth.year))
-    if family.husband.birth is not None and family.marriage_date is not None and family.husband.birth.year + 14 > family.marriage_date.year:
-        print(consts.MSG_US10.format(str(family.husband),
-                                     family.marriage_date.year, family.husband.birth.year))
+    if (
+        family.wife.birth is not None
+        and family.marriage_date is not None
+        and family.wife.birth.year + 14 > family.marriage_date.year
+    ):
+        print(
+            consts.MSG_US10.format(
+                str(family.wife), family.marriage_date.year, family.wife.birth.year
+            )
+        )
+    if (
+        family.husband.birth is not None
+        and family.marriage_date is not None
+        and family.husband.birth.year + 14 > family.marriage_date.year
+    ):
+        print(
+            consts.MSG_US10.format(
+                str(family.husband),
+                family.marriage_date.year,
+                family.husband.birth.year,
+            )
+        )
+
 
 # Mother should be less than 60 years older than her children and father should be less than 80 years older than his children
 
@@ -326,21 +433,44 @@ def check_US12(family) -> None:
         return
     if family.children is not None and len(family.children) > 0:
         for child in family.children:
-            if family.wife.birth is not None and child.birth is not None and family.wife.birth.year + 60 < child.birth.year:
-                print(consts.MSG_US12.format(
-                    str(family.wife), family.wife.birth.year, 60, str(child), child.birth.year))
-            if family.husband.birth is not None and child.birth is not None and family.husband.birth.year + 80 < child.birth.year:
-                print(consts.MSG_US12.format(
-                    str(family.husband), family.husband.birth.year, 80, str(child), child.birth.year))
+            if (
+                family.wife.birth is not None
+                and child.birth is not None
+                and family.wife.birth.year + 60 < child.birth.year
+            ):
+                print(
+                    consts.MSG_US12.format(
+                        str(family.wife),
+                        family.wife.birth.year,
+                        60,
+                        str(child),
+                        child.birth.year,
+                    )
+                )
+            if (
+                family.husband.birth is not None
+                and child.birth is not None
+                and family.husband.birth.year + 80 < child.birth.year
+            ):
+                print(
+                    consts.MSG_US12.format(
+                        str(family.husband),
+                        family.husband.birth.year,
+                        80,
+                        str(child),
+                        child.birth.year,
+                    )
+                )
+
 
 # All male members of a family should have the same last name
 
 
 def check_US16(family) -> None:
     members = []
-    if (family.wife is not None):
+    if family.wife is not None:
         members.append(family.wife)
-    if (family.husband is not None):
+    if family.husband is not None:
         members.append(family.husband)
     if family.children is not None and len(family.children) > 0:
         members.extend(family.children)
@@ -349,15 +479,19 @@ def check_US16(family) -> None:
     hasPrinted = False
     for member in members:
         if member.name is not None and member.sex == "M":
-            if (member.name.split(" ", 1)[1] not in last_names):
+            if member.name.split(" ", 1)[1] not in last_names:
                 last_names.append(member.name.split(" ", 1)[1])
             men.append(member)
 
     for member in men:
         for last_name in last_names:
             if last_name != member.name.split(" ", 1)[1]:
-                print(consts.MSG_US16.format(
-                    (member.name + " (" + member.id + ")"), last_name))
+                print(
+                    consts.MSG_US16.format(
+                        (member.name + " (" + member.id + ")"), last_name
+                    )
+                )
+
 
 # Aunts and uncles should not marry their nieces or nephews
 
@@ -368,7 +502,7 @@ def check_US20(families):
     marriages = []
     children_map = defaultdict(lambda: [])
     for family in families:
-        if (family.marriage_date is not None):
+        if family.marriage_date is not None:
             marriages += [(family.husband, family.wife)]
         if family.husband:
             children_map[family.husband] += [x for x in family.children]
@@ -380,7 +514,7 @@ def check_US20(families):
         nn = []
         for sibling in au:
             for other_sibling in au:
-                if (sibling != other_sibling):
+                if sibling != other_sibling:
                     nn += children_map[other_sibling]
 
         check_marriages = product(au, nn)
@@ -390,6 +524,7 @@ def check_US20(families):
             if (c[1], c[0]) in marriages:
                 print(consts.MSG_US20.format(c[1], c[0]))
 
+
 # Husband in family should be male and wife in family should be female
 
 
@@ -397,8 +532,8 @@ def check_US21(family) -> None:
     if family.wife is not None and family.wife.sex != "F":
         print(consts.MSG_US21.format(family.wife, "wife", family.wife.sex))
     if family.husband is not None and family.husband.sex != "M":
-        print(consts.MSG_US21.format(
-            family.husband, "husband", family.husband.sex))
+        print(consts.MSG_US21.format(family.husband, "husband", family.husband.sex))
+
 
 # All individual IDs should be unique and all family IDs should be unique
 
@@ -418,6 +553,7 @@ def check_US22(individuals, families) -> None:
             print(consts.MSG_US22.format(f.id, "family"))
         else:
             f_ids.append(f.id)
+
 
 # No more than one individual with the same name and birth date should appear in a GEDCOM file
 
@@ -439,10 +575,10 @@ def check_US24(families) -> None:
         if f.husband is None or f.wife is None:
             continue
         if {f.wife.name, f.husband.name, f.marriage_date} in info:
-            print(consts.MSG_US24.format(
-                f.wife.name, f.husband.name, f.marriage_date))
+            print(consts.MSG_US24.format(f.wife.name, f.husband.name, f.marriage_date))
         else:
             info.append({f.wife.name, f.husband.name, f.marriage_date})
+
 
 # No more than one child with the same name and birth date should appear in a family
 
@@ -456,6 +592,7 @@ def check_US25(family: Family):
             print(consts.MSG_US25.format(c.id, family.id))
         else:
             seen.add((c.name, c.birth))
+
 
 # List all orphaned children (both parents dead and child < 18 years old) in a GEDCOM file
 # return: List of orphans
@@ -474,9 +611,11 @@ def check_US33(families, individuals):
     for i in individuals:
         if i.birth is not None and (datetime.datetime.now() - i.birth).days < 6570:
             orphans[i.id] = list(
-                filter(lambda x: x.death is not None, all_relatives[i.id]))
+                filter(lambda x: x.death is not None, all_relatives[i.id])
+            )
 
     return orphans
+
 
 # List all couples who were married when the older spouse was more than twice as old as the younger spouse
 # @returns: List of couples [(husband, wife)] where this is true
@@ -489,23 +628,22 @@ def check_US34(families: List[Family]):
         if family.marriage_date is not None:
             h_age = get_age_in_years(family.husband)
             w_age = get_age_in_years(family.wife)
-            if (h_age > w_age and h_age > w_age * 2):
-                print(consts.MSG_US34.format(
-                    family.husband.id, family.wife.id))
+            if h_age > w_age and h_age > w_age * 2:
+                print(consts.MSG_US34.format(family.husband.id, family.wife.id))
                 couples.append((family.husband, family.wife))
-            elif (w_age > h_age and w_age > h_age * 2):
-                print(consts.MSG_US34.format(
-                    family.wife.id, family.husband.id))
+            elif w_age > h_age and w_age > h_age * 2:
+                print(consts.MSG_US34.format(family.wife.id, family.husband.id))
                 couples.append((family.husband, family.wife))
 
     table = [["Couples with Large Age Difference"]]
 
     for couple in couples:
         table.append(couple)
-    
-    print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
+
+    print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
 
     return couples
+
 
 # List all the people who were born in the last 30 days
 # @returns: List of individuals that were born in the last 30 days
@@ -520,6 +658,7 @@ def check_US35(individuals):
             just_born.append(i.name)
     return just_born
 
+
 # List all the people that died in the last 30 days
 # @returns: List of all deceased individuals
 
@@ -532,6 +671,7 @@ def check_US36(individuals):
             print(consts.MSG_US36.format(i))
             deceased.append(i.name)
     return deceased
+
 
 # List all living spouses and descendants of people in a GEDCOM file who died in the last 30 days
 # @returns: List of individuals surviving the deceased individual
@@ -549,18 +689,17 @@ def check_US37(families, individuals):
 
     for i in individuals:
         if i.death is not None and (datetime.datetime.now() - i.death).days <= 30:
-            survivors[i] = list(
-                filter(lambda x: x.death is None, all_relatives[i]))
+            survivors[i] = list(filter(lambda x: x.death is None, all_relatives[i]))
 
     table = [["Deceased", "Survivors"]]
 
-    for k,v in survivors.items():
+    for k, v in survivors.items():
         table.append([str(k), [str(x) for x in v]])
-    
-    print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
 
+    print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
 
     return survivors
+
 
 # list all the married
 # returns a list of all indiviuals that are alive and married
@@ -579,8 +718,10 @@ def check_US30(families, individuals):
     for i in individuals:
         if i.death is None:
             livingCouples[i.id] = list(
-                filter(lambda x: x.death is None, all_relatives[i.id]))
+                filter(lambda x: x.death is None, all_relatives[i.id])
+            )
     return livingCouples
+
 
 # list all the single
 
@@ -594,6 +735,7 @@ def check_US31(individuals):
             single.append(i)
 
     return single
+
 
 # All family roles (spouse, child) specified in an individual record should have corresponding entries in the corresponding family records.
 # Likewise, all individual roles (spouse, child) specified in family records should have corresponding entries in the corresponding individual's records.
@@ -626,36 +768,55 @@ def check_US26(families, individuals):
         family = d[2]
         print(consts.MSG_US26.format(individual, record_type, family))
 
+
 # List all living people in a GEDCOM file whose birthdays occur in the next 30 days
 # @returns: Table in list format
+
 
 def check_US38(individuals):
     table = [["Name", "Upcoming Birthday"]]
     for individual in individuals:
-        if (individual.birth):
+        if individual.birth:
             age = get_age_in_years(individual)
-            time_until_birthday = ((individual.birth + relativedelta.relativedelta(years=age+1)) - datetime.datetime.now()).days
-            if (time_until_birthday > 364):
+            time_until_birthday = (
+                (individual.birth + relativedelta.relativedelta(years=age + 1))
+                - datetime.datetime.now()
+            ).days
+            if time_until_birthday > 364:
                 time_until_birthday = time_until_birthday - 364
-            if (time_until_birthday <= 30 and time_until_birthday >= 0):
-                table.append([individual.name, individual.birth.strftime('%m-%d')])
-    print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
+            if time_until_birthday <= 30 and time_until_birthday >= 0:
+                table.append([individual.name, individual.birth.strftime("%m-%d")])
+    print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
     return table
-    
+
+
 # List all living couples in a GEDCOM file whose marriage anniversaries occur in the next 30 days
 # @returns: Table in list format
+
 
 def check_US39(families):
     table = [["Husband", "Wife", " Upcoming Anniversary"]]
     for family in families:
-        if (family.marriage_date):
+        if family.marriage_date:
             marriage_length = get_marriage_length_in_years(family)
-            time_until_anniversary = ((family.marriage_date + relativedelta.relativedelta(years=marriage_length+1)) - datetime.datetime.now()).days
-            if (time_until_anniversary > 364):
+            time_until_anniversary = (
+                (
+                    family.marriage_date
+                    + relativedelta.relativedelta(years=marriage_length + 1)
+                )
+                - datetime.datetime.now()
+            ).days
+            if time_until_anniversary > 364:
                 time_until_anniversary = time_until_anniversary - 364
-            if (time_until_anniversary <= 30 and time_until_anniversary >= 0):
-                table.append([family.husband.name, family.wife.name, family.marriage_date.strftime('%m-%d')])
-    print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
+            if time_until_anniversary <= 30 and time_until_anniversary >= 0:
+                table.append(
+                    [
+                        family.husband.name,
+                        family.wife.name,
+                        family.marriage_date.strftime("%m-%d"),
+                    ]
+                )
+    print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
     return table
 
 #List siblings in families by decreasing age, i.e. oldest siblings first

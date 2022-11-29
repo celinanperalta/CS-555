@@ -1,16 +1,16 @@
 MONTHS = {
-    "JAN": 1, 
-    "FEB": 2, 
-    "MAR": 3, 
-    "APR": 4, 
-    "MAY": 5, 
-    "JUN": 6, 
-    "JUL": 7, 
-    "AUG": 8, 
-    "SEP": 9, 
-    "OCT": 10, 
-    "NOV": 11, 
-    "DEC": 12
+    "JAN": 1,
+    "FEB": 2,
+    "MAR": 3,
+    "APR": 4,
+    "MAY": 5,
+    "JUN": 6,
+    "JUL": 7,
+    "AUG": 8,
+    "SEP": 9,
+    "OCT": 10,
+    "NOV": 11,
+    "DEC": 12,
 }
 
 GEDCOM_TAG_INDI = "INDI"
@@ -48,7 +48,7 @@ TAGS = [
     GEDCOM_TAG_DATE,
     GEDCOM_TAG_HEAD,
     GEDCOM_TAG_TRLR,
-    GEDCOM_TAG_NOTE
+    GEDCOM_TAG_NOTE,
 ]
 
 # Errors and anomalies go here

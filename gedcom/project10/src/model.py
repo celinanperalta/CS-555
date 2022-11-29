@@ -1,10 +1,12 @@
-from util import gedcom_date_to_datetime
 from typing import List
-from util import get_age_in_years
+
+from util import gedcom_date_to_datetime, get_age_in_years
 
 
 class Individual:
-    def __init__(self, id, name = None, sex = None, birth = None, death = None, famc = [], fams = []) -> None:
+    def __init__(
+        self, id, name=None, sex=None, birth=None, death=None, famc=[], fams=[]
+    ) -> None:
         self.id = id
         self.name = name
         self.sex = sex
@@ -18,13 +20,13 @@ class Individual:
 
     def set_sex(self, sex):
         self.sex = sex
-    
+
     def set_birth(self, birth):
         self.birth = gedcom_date_to_datetime(birth)
-    
+
     def set_death(self, death):
         self.death = gedcom_date_to_datetime(death)
-    
+
     def set_famc(self, famc):
         self.famc.clear()
         for x in famc:
@@ -42,13 +44,31 @@ class Individual:
         self.fams.append(x)
 
     def to_table_row(self):
-        return [self.id, self.name, self.sex, self.birth, self.death, self.famc, self.fams, get_age_in_years(self)]
+        return [
+            self.id,
+            self.name,
+            self.sex,
+            self.birth,
+            self.death,
+            self.famc,
+            self.fams,
+            get_age_in_years(self),
+        ]
 
     def __str__(self):
         return f"{self.name} ({self.id})"
 
+
 class Family:
-    def __init__(self, id, husband : Individual = None, wife : Individual = None, children : List[Individual] = [], marriage_date = None, divorce_date = None) -> None:
+    def __init__(
+        self,
+        id,
+        husband: Individual = None,
+        wife: Individual = None,
+        children: List[Individual] = [],
+        marriage_date=None,
+        divorce_date=None,
+    ) -> None:
         self.id = id
         self.husband = husband
         self.wife = wife
@@ -58,13 +78,13 @@ class Family:
 
     def set_id(self, id):
         self.id = id
-    
+
     def set_husband(self, husband):
         self.husband = husband
-    
+
     def set_wife(self, wife):
         self.wife = wife
-    
+
     def set_children(self, children):
         self.children.clear()
         for x in children:
@@ -81,8 +101,14 @@ class Family:
 
     # For pretty printing families
     def to_table_row(self):
-        return [self.id, self.husband.name if self.husband else "None", self.wife.name if self.wife else "None", [x.id for x in self.children], self.marriage_date, self.divorce_date]
-    
+        return [
+            self.id,
+            self.husband.name if self.husband else "None",
+            self.wife.name if self.wife else "None",
+            [x.id for x in self.children],
+            self.marriage_date,
+            self.divorce_date,
+        ]
+
     def __str__(self):
         return f"{self.id}"
-
