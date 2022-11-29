@@ -304,6 +304,7 @@ def check_US14(family):
 # siblings cannot marry each other
 # it's going to catch the 2nd of the pair --> so if sib1 and sib2 are 
 # married its going to catch sib2
+# will catch all siblings (well half) married in the families
 
 def check_US18(families):
     for family in families: #every family in array of families
@@ -319,11 +320,6 @@ def check_US18(families):
                         siblingMarriage[j] += 1   
                 if((siblingMarriage[j] > 1)): #if that fam id is found more than once ! they are married
                     print(consts.MSG_US18.format(str(i.id)))
-
-
-    
-
-
 
 def US11_get_marriage_dict(families):
     marriage_dict = defaultdict(lambda: [])
