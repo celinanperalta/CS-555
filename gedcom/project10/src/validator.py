@@ -818,3 +818,17 @@ def check_US39(families):
                 )
     print(tabulate(table, headers="firstrow", tablefmt="fancy_grid"))
     return table
+
+#List siblings in families by decreasing age, i.e. oldest siblings first
+def check_US28(family: Family):
+    children: List[Individual] = family.children
+    info_list = set()
+
+    for c in children:
+        info_list.append(c.name, c.birth)
+
+    sorted_children = sorted(info_list, reverse=True)
+    return sorted_children
+
+
+

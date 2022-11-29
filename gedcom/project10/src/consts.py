@@ -61,17 +61,13 @@ MSG_US04 = "Error US04: {0} and {1}'s marriage date {2} is after divorce date {3
 MSG_US05 = "Error US05: {0}'s marriage date {1} is after death date {2}."
 MSG_US08 = "Anomaly US08: {0} born {1} before marriage on {2}."
 MSG_US09 = "Error US09: {0} born {1} after death date on {2}."
-MSG_US10 = (
-    "Anomaly US10: {0}'s marriage date {1} is less than 14 years after birth date {2}."
-)
+MSG_US10 = "Anomaly US10: {0}'s marriage date {1} is less than 14 years after birth date {2}."
 MSG_US11 = "Anomaly US11: {0} is in multiple marriages."
 MSG_US12 = "Anomaly US12: {0}'s birthday date in {1} is more than {2} years after their child {3}'s birth date in {4}."
 MSG_US13 = "Anomaly US13: Siblings {0} and {1} were born less than 8 months apart."
 MSG_US14 = "Anomaly US14: {0} has more than 5 children born the same day."
 MSG_US15 = "Anomaly US15: Family {0} has more than 15 siblings."
-MSG_US16 = (
-    "Anomaly US16: {0} has another male family member with a different last name ({1})"
-)
+MSG_US16 = "Anomaly US16: {0} has another male family member with a different last name ({1})"
 MSG_US17 = "Anomaly US17: {0} is married to descendant/ancestor {1}."
 MSG_US18 = "Anomaly US18: {0} is married to their sibling."
 MSG_US19 = "Anomaly US19: {0} and {1} are married first cousins."
@@ -86,3 +82,4 @@ MSG_US35 = "Anomaly US35: {0} was just born in the past 30 days."
 MSG_US36 = "Anomaly US36: {0} passed away in the past 30 days."
 MSG_US34 = "Anomaly US34: {0} is more than twice as old as spouse {1}."
 MSG_US26 = "Error US26: {0} has inconsistent records as a {1} for family {2}."
+
