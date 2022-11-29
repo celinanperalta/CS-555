@@ -731,8 +731,8 @@ def check_US31(individuals):
     curr_date = datetime.datetime.now()
 
     for i in individuals:
-        if i.fams is None and (curr_date - i.birth) > datetime.timedelta(days = 365 * 30) :
-            single[i] = i.id
+        if len(i.fams) == 0 and (curr_date - i.birth) > datetime.timedelta(days = 365 * 30) :
+            single[i.id] = i
 
     return single
 
