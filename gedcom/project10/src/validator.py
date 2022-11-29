@@ -311,7 +311,6 @@ def check_US18(family) -> None:
     siblingMarriage = {}
 
     for i in sibling:
-<<<<<<< HEAD
         if(len(i.fams) > 0):
             if(i not in siblingMarriage):
                 siblingMarriage[i] = 1 
@@ -322,18 +321,6 @@ def check_US18(family) -> None:
                 #print(i)
                 #print(siblingMarriage)
             if(siblingMarriage[i] > 1):
-=======
-        if i.fams is not None:
-            if i.fams not in siblingMarriage:
-                siblingMarriage[i.fams] = 1
-                # print(i)
-                # print(siblingMarriage)
-            else:
-                siblingMarriage[i.fams] += 1
-                # print(i)
-                # print(siblingMarriage)
-            if siblingMarriage[i.fams] > 1:
->>>>>>> 49638562995d2690edbabd24a9ee1b781335c2fa
                 print(consts.MSG_US18.format(str(i.id)))
 
 
@@ -674,15 +661,8 @@ def check_US35(individuals):
 
 # List all the people that died in the last 30 days
 # @returns: List of all deceased individuals
-<<<<<<< HEAD
 def check_US36(individuals): 
     deceased = {}
-=======
-
-
-def check_US36(individuals):
-    deceased = []
->>>>>>> 49638562995d2690edbabd24a9ee1b781335c2fa
 
     for i in individuals:
         if i.death is not None and (datetime.datetime.now() - i.death).days <= 30:
