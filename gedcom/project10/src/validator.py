@@ -441,7 +441,7 @@ def check_US29(individuals):
     deceased = {}
     for i in individuals:
         if i.death is not None:
-            death[i] = {}
+            deceased[i] = {}
 
     return deceased
 

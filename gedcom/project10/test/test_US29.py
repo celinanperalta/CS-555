@@ -1,3 +1,10 @@
+from pprint import pprint
+import pytest
+import datetime
+import consts
+from model import Individual, Family
+from src.validator import check_US29
+from util import gedcom_date_to_datetime
 import pprint
 
 def test_US29(): 
@@ -10,7 +17,7 @@ def test_US29():
 
     individuals = [h,w, m, p]
 
-    deaths = check_US32(individuals)
+    deaths = check_US29(individuals)
     #print(couples)
 
     assert len(deaths) == 2
