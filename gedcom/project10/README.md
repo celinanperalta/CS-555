@@ -1,16 +1,17 @@
 # Setup
 ```
-cd gedcom/project04
-pip install -r requirements.txt
+cd gedcom/project10
+make install
 ```
 # How to Run
 ```
-cd gedcom/project04/src
+cd gedcom/project10/src
 chmod u+x main.py
-python main.py --file <filename>
+python main.py --file path/to/file
 ```
 # Testing
 ```
-cd gedcom/project04
-pytest
+cd gedcom/project10
+make run-tests
 ```
+Output will be in `tests.txt`.

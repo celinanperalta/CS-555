@@ -19,7 +19,7 @@ def test_less_than_8(capfd):
     check_US13(family)
 
     out, err = capfd.readouterr()
-    assert out.strip() == consts.MSG_US13.format(i1.id, i2.id)
+    assert out.strip() == consts.MSG_US13.format(i1, i2)
 
 def test_twins(capfd):
     i1 = Individual("I01", "A", "M", gedcom_date_to_datetime("1 JAN 2022"))

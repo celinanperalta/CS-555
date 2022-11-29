@@ -19,7 +19,7 @@ def test_marriage_no_divorce(capfd):
     check_US11(families)
 
     out, err = capfd.readouterr()
-    assert out.strip() == consts.MSG_US11.format(wife.id)
+    assert out.strip() == consts.MSG_US11.format(wife)
 
 
 def test_marriage_with_divorce(capfd):

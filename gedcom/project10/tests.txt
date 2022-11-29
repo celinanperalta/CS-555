@@ -1,64 +1,222 @@
 ============================= test session starts ==============================
-collecting ... collected 49 items
+collecting ... collected 85 items
 
-test/test_US01.py::test_invalid_birth PASSED                             [  2%]
-test/test_US01.py::test_invalid_death PASSED                             [  4%]
-test/test_US01.py::test_invalid_marriage PASSED                          [  6%]
-test/test_US01.py::test_invalid_divorce PASSED                           [  8%]
-test/test_US01.py::test_empty PASSED                                     [ 10%]
-test/test_US02.py::test_birth_before_marriage PASSED                     [ 12%]
-test/test_US02.py::test_valid_marriage PASSED                            [ 14%]
-test/test_US02.py::test_birth_no_marriage PASSED                         [ 16%]
-test/test_US02.py::test_marriage_no_birth PASSED                         [ 18%]
-test/test_US02.py::test_same_birth_same_marriage PASSED                  [ 20%]
-test/test_US04.py::test_divorce_before_marriage PASSED                   [ 22%]
-test/test_US04.py::test_divorce_no_marriage PASSED                       [ 24%]
-test/test_US04.py::test_valid_divorce PASSED                             [ 26%]
-test/test_US04.py::test_marriage_no_divorce PASSED                       [ 28%]
-test/test_US04.py::test_empty PASSED                                     [ 30%]
-test/test_US08.py::test_birth_before_marriage PASSED                     [ 32%]
-test/test_US08.py::test_birth_after_9 PASSED                             [ 34%]
-test/test_US08.py::test_birth_in_9 PASSED                                [ 36%]
-test/test_US08.py::test_birth_after_marriage PASSED                      [ 38%]
-test/test_US08.py::test2 PASSED                                          [ 40%]
-test/test_US10.py::test_marriage_wife_minor PASSED                       [ 42%]
-test/test_US10.py::test_marriage_husband_minor PASSED                    [ 44%]
-test/test_US10.py::test_marriage_both_minor PASSED                       [ 46%]
-test/test_US10.py::test_marriage_both_adult PASSED                       [ 48%]
-test/test_US11.py::test_marriage_no_divorce PASSED                       [ 51%]
-test/test_US11.py::test_marriage_with_divorce PASSED                     [ 53%]
-test/test_US12.py::test_old_wife_one_kid PASSED                          [ 55%]
-test/test_US12.py::test_old_husband_one_kid PASSED                       [ 57%]
-test/test_US12.py::test_old_both_one_kid PASSED                          [ 59%]
-test/test_US12.py::test_old_wife_both_kids PASSED                        [ 61%]
-test/test_US12.py::test_old_husband_both_kids PASSED                     [ 63%]
-test/test_US12.py::test_old_both_both_kids PASSED                        [ 65%]
-test/test_US12.py::test_old_none PASSED                                  [ 67%]
-test/test_US13.py::test_less_than_8 PASSED                               [ 69%]
-test/test_US13.py::test_twins PASSED                                     [ 71%]
-test/test_US14.py::test_more_than_five_births PASSED                     [ 73%]
-test/test_US14.py::test_less_than_five_births PASSED                     [ 75%]
-test/test_US14.py::test_five_births PASSED                               [ 77%]
-test/test_US15.py::test_has_15 PASSED                                    [ 79%]
-test/test_US16.py::test_all_same PASSED                                  [ 81%]
-test/test_US16.py::test_married_women PASSED                             [ 83%]
-test/test_US16.py::test_married_men_same PASSED                          [ 85%]
-test/test_US16.py::test_different_son PASSED                             [ 87%]
-test/test_US16.py::test_two_different_sons PASSED                        [ 89%]
-test/test_US16.py::test_married_men_different PASSED                     [ 91%]
-test/test_US17.py::test_descendant_marriage PASSED                       [ 93%]
-test/test_US18.py::test_more_than_five_births PASSED                     [ 95%]
-test/test_US19.py::test_US19 PASSED                                      [ 97%]
-test/test_US20.py::test_US20 PASSED                                      [100%]
+test/test_US01.py::test_invalid_birth PASSED                             [  1%]
+test/test_US01.py::test_invalid_death PASSED                             [  2%]
+test/test_US01.py::test_invalid_marriage PASSED                          [  3%]
+test/test_US01.py::test_invalid_divorce PASSED                           [  4%]
+test/test_US01.py::test_empty PASSED                                     [  5%]
+test/test_US02.py::test_birth_before_marriage PASSED                     [  7%]
+test/test_US02.py::test_valid_marriage PASSED                            [  8%]
+test/test_US02.py::test_birth_no_marriage PASSED                         [  9%]
+test/test_US02.py::test_marriage_no_birth PASSED                         [ 10%]
+test/test_US02.py::test_same_birth_same_marriage PASSED                  [ 11%]
+test/test_US04.py::test_divorce_before_marriage PASSED                   [ 12%]
+test/test_US04.py::test_divorce_no_marriage PASSED                       [ 14%]
+test/test_US04.py::test_valid_divorce PASSED                             [ 15%]
+test/test_US04.py::test_marriage_no_divorce PASSED                       [ 16%]
+test/test_US04.py::test_empty PASSED                                     [ 17%]
+test/test_US08.py::test_birth_before_marriage PASSED                     [ 18%]
+test/test_US08.py::test_birth_after_9 PASSED                             [ 20%]
+test/test_US08.py::test_birth_in_9 PASSED                                [ 21%]
+test/test_US08.py::test_birth_after_marriage PASSED                      [ 22%]
+test/test_US08.py::test2 PASSED                                          [ 23%]
+test/test_US10.py::test_marriage_wife_minor PASSED                       [ 24%]
+test/test_US10.py::test_marriage_husband_minor PASSED                    [ 25%]
+test/test_US10.py::test_marriage_both_minor PASSED                       [ 27%]
+test/test_US10.py::test_marriage_both_adult PASSED                       [ 28%]
+test/test_US11.py::test_marriage_no_divorce PASSED                       [ 29%]
+test/test_US11.py::test_marriage_with_divorce PASSED                     [ 30%]
+test/test_US12.py::test_old_wife_one_kid PASSED                          [ 31%]
+test/test_US12.py::test_old_husband_one_kid PASSED                       [ 32%]
+test/test_US12.py::test_old_both_one_kid PASSED                          [ 34%]
+test/test_US12.py::test_old_wife_both_kids PASSED                        [ 35%]
+test/test_US12.py::test_old_husband_both_kids PASSED                     [ 36%]
+test/test_US12.py::test_old_both_both_kids PASSED                        [ 37%]
+test/test_US12.py::test_old_none PASSED                                  [ 38%]
+test/test_US13.py::test_less_than_8 PASSED                               [ 40%]
+test/test_US13.py::test_twins PASSED                                     [ 41%]
+test/test_US14.py::test_more_than_five_births PASSED                     [ 42%]
+test/test_US14.py::test_less_than_five_births PASSED                     [ 43%]
+test/test_US14.py::test_five_births PASSED                               [ 44%]
+test/test_US15.py::test_has_15 PASSED                                    [ 45%]
+test/test_US16.py::test_all_same PASSED                                  [ 47%]
+test/test_US16.py::test_married_women PASSED                             [ 48%]
+test/test_US16.py::test_married_men_same PASSED                          [ 49%]
+test/test_US16.py::test_different_son PASSED                             [ 50%]
+test/test_US16.py::test_two_different_sons PASSED                        [ 51%]
+test/test_US16.py::test_married_men_different PASSED                     [ 52%]
+test/test_US17.py::test_descendant_marriage PASSED                       [ 54%]
+test/test_US18.py::test_more_than_five_births FAILED                     [ 55%]
+test/test_US19.py::test_US19 PASSED                                      [ 56%]
+test/test_US20.py::test_US20 PASSED                                      [ 57%]
+test/test_US21.py::test_wife_m PASSED                                    [ 58%]
+test/test_US21.py::test_husband_f PASSED                                 [ 60%]
+test/test_US21.py::test_wife_m_husband_f PASSED                          [ 61%]
+test/test_US21.py::test_control PASSED                                   [ 62%]
+test/test_US22.py::test_same_i_id PASSED                                 [ 63%]
+test/test_US22.py::test_same_f_id PASSED                                 [ 64%]
+test/test_US22.py::test_same_f_and_i_id PASSED                           [ 65%]
+test/test_US22.py::test_control PASSED                                   [ 67%]
+test/test_US23.py::test_same_name_and_birth PASSED                       [ 68%]
+test/test_US23.py::test_same_name PASSED                                 [ 69%]
+test/test_US23.py::test_same_birth PASSED                                [ 70%]
+test/test_US23.py::test_control PASSED                                   [ 71%]
+test/test_US24.py::test_same_names_and_date PASSED                       [ 72%]
+test/test_US24.py::test_control PASSED                                   [ 74%]
+test/test_US25.py::test_US25 PASSED                                      [ 75%]
+test/test_US26.py::test_US26 PASSED                                      [ 76%]
+test/test_US27.py::test_US27 FAILED                                      [ 77%]
+test/test_US30.py::test_US30 PASSED                                      [ 78%]
+test/test_US31.py::test_US31 FAILED                                      [ 80%]
+test/test_US33.py::test_US33 PASSED                                      [ 81%]
+test/test_US34.py::test_US34_husband_older PASSED                        [ 82%]
+test/test_US34.py::test_US34_wife_older PASSED                           [ 83%]
+test/test_US35.py::test_US35 FAILED                                      [ 84%]
+test/test_US36.py::test_US36 FAILED                                      [ 85%]
+test/test_US37.py::test_US37 PASSED                                      [ 87%]
+test/test_US38.py::test_US38_one_birth PASSED                            [ 88%]
+test/test_US38.py::test_US38_two_births PASSED                           [ 89%]
+test/test_US38.py::test_US38_no_birth PASSED                             [ 90%]
+test/test_US39.py::test_US39_one_anniversary PASSED                      [ 91%]
+test/test_US39.py::test_US39_two_anniversaries PASSED                    [ 92%]
+test/test_US39.py::test_US39_no_anniversary PASSED                       [ 94%]
+test/test_US41.py::test_full_date PASSED                                 [ 95%]
+test/test_US41.py::test_date_no_day PASSED                               [ 96%]
+test/test_US41.py::test_date_no_day_no_month PASSED                      [ 97%]
+test/test_US41.py::test_gedcom_date_1 PASSED                             [ 98%]
+test/test_US41.py::test_gedcom_date_2 PASSED                             [100%]
 
+=================================== FAILURES ===================================
+__________________________ test_more_than_five_births __________________________
+
+capfd = <_pytest.capture.CaptureFixture object at 0x12b84aad0>
+
+    def test_more_than_five_births(capfd):
+        mom = Individual("I01", datetime.datetime(1979, 10, 12) + datetime.timedelta(days=1))
+        dad = Individual("I02", datetime.datetime(1977, 1, 12) + datetime.timedelta(days=1))
+    
+    
+        sib1 = Individual("I03", datetime.datetime(2000, 6, 9) + datetime.timedelta(days=1))
+        sib2 = Individual("I04", datetime.datetime(2005, 7, 11) + datetime.timedelta(days=1))
+    
+    
+        obj = Family("F01", mom, dad, [], datetime.datetime(2001, 1, 2) + datetime.timedelta(days=1))
+        obj.set_children([sib1, sib2])
+    
+        obj2 = Family("F02", sib1, sib2, datetime.datetime(2022, 1, 2) + datetime.timedelta(days=1))
+    
+        sib1.set_fams([obj2])
+        sib2.set_fams([obj2])
+    
+        #print(sib1.birth)
+    
+>       check_US18(obj)
+
+test/test_US18.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+family = <model.Family object at 0x12b88c130>
+
+    def check_US18(family) -> None:
+        sibling = family.children
+        siblingMarriage = {}
+    
+        for i in sibling:
+            if i.fams is not None:
+>               if i.fams not in siblingMarriage:
+E               TypeError: unhashable type: 'list'
+
+src/validator.py:315: TypeError
+__________________________________ test_US27 ___________________________________
+
+capfd = <_pytest.capture.CaptureFixture object at 0x12b88c730>
+
+    def test_US27(capfd):
+    
+>       i0 = Individual("I0", "John Doe", "M", birth=datetime.datetime.now() - datetime.timedelta(years=28))
+E       TypeError: 'years' is an invalid keyword argument for __new__()
+
+test/test_US27.py:9: TypeError
+__________________________________ test_US31 ___________________________________
+
+    def test_US31():
+    
+        h = Individual("I4", "H", "M", birth=gedcom_date_to_datetime("1 JAN 1976"))
+        w = Individual("I5", "W", "F", birth=gedcom_date_to_datetime("1 JAN 1977"))
+    
+        m = Individual("I6", "M", "P", birth=gedcom_date_to_datetime("1 JAN 1986"), fams = "F02")
+        p = Individual("I7", "J", "W", birth=gedcom_date_to_datetime("1 JAN 1987"), fams = "F02")
+    
+        family = Family("F02", m, p, marriage_date=gedcom_date_to_datetime("1 FEB 2000"), divorce_date=gedcom_date_to_datetime("1 FEB 2008"))
+    
+        individuals = [h,w, m, p]
+    
+        couples = check_US31(individuals)
+        #print(couples)
+    
+    
+>       assert "I4" in couples
+E       AssertionError: assert 'I4' in []
+
+test/test_US31.py:26: AssertionError
+__________________________________ test_US35 ___________________________________
+
+capfd = <_pytest.capture.CaptureFixture object at 0x12b88e0e0>
+
+    def test_US35(capfd):
+        person1 = Individual("I01", "Kristen Smiles", "F", birth=gedcom_date_to_datetime("12 OCT 2022"))
+        person2 = Individual("I02", "Chris Smiles", "F", birth=gedcom_date_to_datetime("1 JAN 2001"))
+    
+        individuals = [person1, person2]
+        check_US35(individuals)
+    
+        out, err = capfd.readouterr()
+>       assert out.strip() == consts.MSG_US35.format(person1.name)
+E       AssertionError: assert '' == 'Anomaly US35: Kristen Smiles was just born in the past 30 days.'
+E         - Anomaly US35: Kristen Smiles was just born in the past 30 days.
+
+test/test_US35.py:18: AssertionError
+__________________________________ test_US36 ___________________________________
+
+capfd = <_pytest.capture.CaptureFixture object at 0x12b93a620>
+
+    def test_US36(capfd):
+        person1 = Individual("I01","Kristen Smiles", "F", death=gedcom_date_to_datetime("12 OCT 2022"))
+        person2 = Individual("I02","Jacke Paul", "M", death=gedcom_date_to_datetime("12 OCT 2002"))
+    
+        individuals = [person1, person2]
+    
+        check_US36(individuals)
+    
+        out, err = capfd.readouterr()
+>       assert out.strip() == consts.MSG_US36.format(person1.name)
+E       AssertionError: assert '' == 'Anomaly US36: Kristen Smiles passed away in the past 30 days.'
+E         - Anomaly US36: Kristen Smiles passed away in the past 30 days.
+
+test/test_US36.py:18: AssertionError
 =============================== warnings summary ===============================
-../project06/src/parse.py:13
-  /Users/celinaperalta/Documents/School/CS-555/CS-555/gedcom/project08/../project06/src/parse.py:13: DeprecationWarning: invalid escape sequence '\d'
-    re = '(\d{1,2}) ([A-Z]{3}) (\d{4})'
+src/parse.py:15
+  /Users/celinaperalta/Documents/School/CS-555/CS-555/gedcom/project10/../project10/src/parse.py:15: DeprecationWarning: invalid escape sequence '\d'
+    re = "(\d{1,2}) ([A-Z]{3}) (\d{4})"
 
-../project06/src/parse.py:34
-  /Users/celinaperalta/Documents/School/CS-555/CS-555/gedcom/project08/../project06/src/parse.py:34: DeprecationWarning: invalid escape sequence '\d'
-    level_re = '^(0|[1-9]+\d*) '
+src/parse.py:20
+  /Users/celinaperalta/Documents/School/CS-555/CS-555/gedcom/project10/../project10/src/parse.py:20: DeprecationWarning: invalid escape sequence '\d'
+    re = "([A-Z]{3}) (\d{4})"
+
+src/parse.py:25
+  /Users/celinaperalta/Documents/School/CS-555/CS-555/gedcom/project10/../project10/src/parse.py:25: DeprecationWarning: invalid escape sequence '\d'
+    re = "(\d{4})"
+
+src/parse.py:50
+  /Users/celinaperalta/Documents/School/CS-555/CS-555/gedcom/project10/../project10/src/parse.py:50: DeprecationWarning: invalid escape sequence '\d'
+    level_re = "^(0|[1-9]+\d*) "
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-======================== 49 passed, 2 warnings in 1.46s ========================
+=========================== short test summary info ============================
+FAILED test/test_US18.py::test_more_than_five_births - TypeError: unhashable ...
+FAILED test/test_US27.py::test_US27 - TypeError: 'years' is an invalid keywor...
+FAILED test/test_US31.py::test_US31 - AssertionError: assert 'I4' in []
+FAILED test/test_US35.py::test_US35 - AssertionError: assert '' == 'Anomaly U...
+FAILED test/test_US36.py::test_US36 - AssertionError: assert '' == 'Anomaly U...
+=================== 5 failed, 80 passed, 4 warnings in 0.77s ===================
